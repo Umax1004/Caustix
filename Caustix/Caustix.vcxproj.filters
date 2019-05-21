@@ -27,9 +27,15 @@
     <ClInclude Include="src\Caustix\EntryPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Caustix\Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Caustix\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Caustix\Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
