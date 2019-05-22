@@ -4,6 +4,9 @@
     <Filter Include="Caustix">
       <UniqueIdentifier>{E6260814-5206-87AF-5B1E-1286C77CED10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Caustix\Events">
+      <UniqueIdentifier>{0A543C0F-F621-3015-DFB5-A03BCB220C7A}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Caustix.h" />
@@ -16,9 +19,22 @@
     <ClInclude Include="src\Caustix\EntryPoint.h">
       <Filter>Caustix</Filter>
     </ClInclude>
+    <ClInclude Include="src\Caustix\Events\ApplicationEvent.h">
+      <Filter>Caustix\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Caustix\Events\Event.h">
+      <Filter>Caustix\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Caustix\Events\KeyEvent.h">
+      <Filter>Caustix\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Caustix\Events\MouseEvent.h">
+      <Filter>Caustix\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Caustix\Log.h">
       <Filter>Caustix</Filter>
     </ClInclude>
+    <ClInclude Include="src\cxpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Caustix\Application.cpp">
@@ -27,5 +43,6 @@
     <ClCompile Include="src\Caustix\Log.cpp">
       <Filter>Caustix</Filter>
     </ClCompile>
+    <ClCompile Include="src\cxpch.cpp" />
   </ItemGroup>
 </Project>

@@ -21,10 +21,14 @@ project "Caustix"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
-	}
+    }
+    
+    pchheader "cxpch.h"
+	pchsource "Caustix/src/cxpch.cpp"
     
     includedirs
 	{
+        "%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include"
     }
     

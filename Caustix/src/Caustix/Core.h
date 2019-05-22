@@ -9,3 +9,5 @@
 #else
 	#error Caustix only supports windows for now :(
 #endif // CX_PLATFORM_WINDOWS
+
+#define BIT(x) (1 << x)

@@ -1,3 +1,4 @@
+#include <cxpch.h>
 #include <Caustix.h>
 
 class Sandbox : public Caustix::Application
