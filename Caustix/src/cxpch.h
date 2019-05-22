@@ -12,6 +12,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "Caustix/Log.h"
+
 #ifdef CX_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif

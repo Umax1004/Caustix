@@ -3,11 +3,14 @@
 #include "Events/ApplicationEvent.h"
 #include "Log.h"
 
+#include <GLFW/glfw3.h>
+
 namespace Caustix
 {
 
 	Application::Application()
 	{
+		m_Window = std::unique_ptr<Window>(Window::Create());
 	}
 
 
@@ -17,20 +20,10 @@ namespace Caustix
 
 	void Application::Run()
 	{
-		WindowResizeEvent e(1280, 720);
-		if (e.IsInCategory(EventCategoryApplication))
-		{
-			CX_TRACE((int) e.GetStaticType());
-			CX_TRACE(e);
-		}
-		if (e.IsInCategory(EventCategoryInput))
-		{
-			CX_TRACE(e);
-		}
 
 		while (true)
 		{
-
+			m_Window->OnUpdate();
 		}
 	}
 

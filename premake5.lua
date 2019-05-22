@@ -10,6 +10,11 @@ workspace "Caustix"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["glfw"] = "Caustix/vendor/glfw/include"
+
+include "Caustix/vendor/glfw"
+
 project "Caustix"
     location "Caustix"
     kind "SharedLib"
@@ -29,7 +34,17 @@ project "Caustix"
     includedirs
 	{
         "%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+        "%{prj.name}/vendor/spdlog/include",
+        "%{IncludeDir.glfw}"
+    }
+
+    vul_path = os.getenv("VULKAN_SDK")
+    print(vul_path)
+
+    links
+    {
+        "GLFW",
+        vul_path .. "/Lib/vulkan-1.lib"
     }
     
     filter "system:windows"
@@ -40,7 +55,8 @@ project "Caustix"
         defines 
         {
             "CX_PLATFORM_WINDOWS",
-            "CX_BUILD_DLL"
+            "CX_BUILD_DLL",
+            "CX_ENABLE_ASSERTS"
         }
 
         postbuildcommands
