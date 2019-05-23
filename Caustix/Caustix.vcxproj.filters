@@ -7,6 +7,12 @@
     <Filter Include="Caustix\Events">
       <UniqueIdentifier>{0A543C0F-F621-3015-DFB5-A03BCB220C7A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Caustix\Layer">
+      <UniqueIdentifier>{323818BB-9EF8-93F1-6733-DD6ED3B2D8CD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Caustix\Platform">
+      <UniqueIdentifier>{FA85BFEB-E67E-DE3D-0FB1-C3C2FB08BE49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Caustix.h" />
@@ -31,23 +37,39 @@
     <ClInclude Include="src\Caustix\Events\MouseEvent.h">
       <Filter>Caustix\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Caustix\Layer\Layer.h">
+      <Filter>Caustix\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Caustix\Layer\LayerStack.h">
+      <Filter>Caustix\Layer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Caustix\Log.h">
       <Filter>Caustix</Filter>
     </ClInclude>
-    <ClInclude Include="src\cxpch.h" />
+    <ClInclude Include="src\Caustix\Platform\WindowsWindow.h">
+      <Filter>Caustix\Platform</Filter>
+    </ClInclude>
     <ClInclude Include="src\Caustix\Window.h">
       <Filter>Caustix</Filter>
     </ClInclude>
-    <ClInclude Include="src\Caustix\Platform\WindowsWindow.h" />
+    <ClInclude Include="src\cxpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Caustix\Application.cpp">
       <Filter>Caustix</Filter>
     </ClCompile>
+    <ClCompile Include="src\Caustix\Layer\Layer.cpp">
+      <Filter>Caustix\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Caustix\Layer\LayerStack.cpp">
+      <Filter>Caustix\Layer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Caustix\Log.cpp">
       <Filter>Caustix</Filter>
     </ClCompile>
+    <ClCompile Include="src\Caustix\Platform\WindowsWindow.cpp">
+      <Filter>Caustix\Platform</Filter>
+    </ClCompile>
     <ClCompile Include="src\cxpch.cpp" />
-    <ClCompile Include="src\Caustix\Platform\WindowsWindow.cpp" />
   </ItemGroup>
 </Project>

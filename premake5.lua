@@ -19,6 +19,7 @@ project "Caustix"
     location "Caustix"
     kind "SharedLib"
     language "C++"
+    staticruntime "Off"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
@@ -49,7 +50,6 @@ project "Caustix"
     
     filter "system:windows"
         cppdialect "C++17"
-        staticruntime "On"
         systemversion "latest"
 
         defines 
@@ -65,23 +65,23 @@ project "Caustix"
         }
     
     filter "configurations:Debug"
-		defines "CX_DEBUG"
+        defines "CX_DEBUG"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "CX_RELEASE"
+        defines "CX_RELEASE"
 		optimize "on"
 
 	filter "configurations:Dist"
-		defines "CX_DIST"
+        defines "CX_DIST"
 		optimize "on"
 
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
-	language "C++"
-
+    language "C++"
+    staticruntime "Off"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
@@ -104,7 +104,6 @@ project "Sandbox"
 
     filter "system:windows"
         cppdialect "C++17"
-        staticruntime "On"
         systemversion "latest"
 
         defines 
@@ -113,13 +112,13 @@ project "Sandbox"
         }
     
     filter "configurations:Debug"
-		defines "CX_DEBUG"
+        defines "CX_DEBUG"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "CX_RELEASE"
+        defines "CX_RELEASE"
 		optimize "on"
 
 	filter "configurations:Dist"
-		defines "CX_DIST"
+        defines "CX_DIST"
 		optimize "on"
