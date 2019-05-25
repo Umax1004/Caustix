@@ -3,6 +3,7 @@
 #include "Caustix/Layer/LayerStack.h"
 #include "Caustix/Events/Event.h"
 #include "Caustix/Events/ApplicationEvent.h"
+#include "Platform/Vulkan/Device.h"
 #include "Window.h"
 
 namespace Caustix
@@ -21,6 +22,7 @@ namespace Caustix
 
 	private:
 		std::unique_ptr<Window> m_Window;
+		std::unique_ptr<Device> m_Device;
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool m_Running = true;
 		LayerStack m_LayerStack;

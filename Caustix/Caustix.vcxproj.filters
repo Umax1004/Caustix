@@ -10,8 +10,11 @@
     <Filter Include="Caustix\Layer">
       <UniqueIdentifier>{323818BB-9EF8-93F1-6733-DD6ED3B2D8CD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Caustix\Platform">
-      <UniqueIdentifier>{FA85BFEB-E67E-DE3D-0FB1-C3C2FB08BE49}</UniqueIdentifier>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -46,13 +49,14 @@
     <ClInclude Include="src\Caustix\Log.h">
       <Filter>Caustix</Filter>
     </ClInclude>
-    <ClInclude Include="src\Caustix\Platform\WindowsWindow.h">
-      <Filter>Caustix\Platform</Filter>
-    </ClInclude>
     <ClInclude Include="src\Caustix\Window.h">
       <Filter>Caustix</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\cxpch.h" />
+    <ClInclude Include="src\Platform\Vulkan\Device.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Caustix\Application.cpp">
@@ -67,9 +71,10 @@
     <ClCompile Include="src\Caustix\Log.cpp">
       <Filter>Caustix</Filter>
     </ClCompile>
-    <ClCompile Include="src\Caustix\Platform\WindowsWindow.cpp">
-      <Filter>Caustix\Platform</Filter>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\cxpch.cpp" />
+    <ClCompile Include="src\Platform\Vulkan\Device.cpp" />
   </ItemGroup>
 </Project>

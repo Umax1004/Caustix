@@ -32,18 +32,18 @@ project "Caustix"
     }
     
     pchheader "cxpch.h"
-	pchsource "Caustix/src/cxpch.cpp"
+    pchsource "Caustix/src/cxpch.cpp"
+    
+    vul_path = os.getenv("VULKAN_SDK")
     
     includedirs
 	{
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
+        vul_path .. "/Include",
         "%{IncludeDir.glfw}",
         "%{IncludeDir.imgui}"
     }
-
-    vul_path = os.getenv("VULKAN_SDK")
-    print(vul_path)
 
     links
     {
