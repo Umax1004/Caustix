@@ -4,3 +4,7 @@
 [submodule "Caustix/vendor/glfw"]
 	path = Caustix/vendor/glfw
 	url = https://github.com/glfw/glfw
+[submodule "Caustix/vendor/imgui"]
+	path = Caustix/vendor/imgui
+	url = https://github.com/ocornut/imgui
+	branch = docking

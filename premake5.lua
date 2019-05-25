@@ -12,8 +12,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["glfw"] = "Caustix/vendor/glfw/include"
+IncludeDir["imgui"] = "Caustix/vendor/imgui"
 
 include "Caustix/vendor/glfw"
+include "Caustix/vendor/imgui"
 
 project "Caustix"
     location "Caustix"
@@ -36,7 +38,8 @@ project "Caustix"
 	{
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
-        "%{IncludeDir.glfw}"
+        "%{IncludeDir.glfw}",
+        "%{IncludeDir.imgui}"
     }
 
     vul_path = os.getenv("VULKAN_SDK")
@@ -45,6 +48,7 @@ project "Caustix"
     links
     {
         "GLFW",
+        "ImGui",
         vul_path .. "/Lib/vulkan-1.lib"
     }
     
