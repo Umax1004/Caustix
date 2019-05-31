@@ -3,4 +3,5 @@
 namespace Caustix
 {
 	void VK_ERROR(VkResult result);
+
 }

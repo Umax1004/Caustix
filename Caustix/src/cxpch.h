@@ -11,6 +11,8 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include <map>
+#include <optional>
 
 #include "Caustix/Log.h"
 

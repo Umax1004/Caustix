@@ -11,11 +11,13 @@ namespace Caustix
 		SetupDebug();
 		InitInstance();
 		InitDebug();
+		InitDevice();
 
 	}
 
 	Device::~Device()
 	{
+		DeInitDevice();
 		DeInitDebug();
 	}
 
@@ -26,7 +28,7 @@ namespace Caustix
 		AddRequiredPlatformInstanceExtensions(&instanceExtensions);
 	}
 
-	
+
 
 	void Device::InitInstance()
 	{
@@ -47,6 +49,105 @@ namespace Caustix
 		instanceCreateInfo.ppEnabledExtensionNames = instanceExtensions.data();
 
 		VK_ERROR(vkCreateInstance(&instanceCreateInfo, nullptr, &instance));
+	}
+
+	void Device::DeInitInstance()
+	{
+		vkDestroyInstance(instance, nullptr);
+	}
+
+	void Device::InitDevice()
+	{
+		{
+			uint32_t gpuCount = 0;
+			vkEnumeratePhysicalDevices(instance, &gpuCount, nullptr);
+			if (gpuCount == 0) {
+				throw std::runtime_error("failed to find GPUs with Vulkan support!");
+			}
+			std::vector<VkPhysicalDevice> gpuList(gpuCount);
+			vkEnumeratePhysicalDevices(instance, &gpuCount, gpuList.data());
+			PickPhysicalDevice(gpuList);
+		}
+
+	}
+
+	void Device::DeInitDevice()
+	{
+	}
+
+	void Device::PickPhysicalDevice(std::vector<VkPhysicalDevice> gpuList)
+	{
+		std::multimap<int, VkPhysicalDevice> candidates;
+
+		for (const auto& device : gpuList) {
+			int score = RateDeviceSuitability(device);
+			candidates.insert(std::make_pair(score, device));
+		}
+
+		if (candidates.rbegin()->first > 0) {
+			physicalDevice = candidates.rbegin()->second;
+		}
+		else {
+			throw std::runtime_error("failed to find a suitable GPU!");
+		}
+	}
+
+	bool Device::IsDeviceSuitable(VkPhysicalDevice device)
+	{
+		QueueFamilyIndices indices = FindQueueFamilies(device);
+
+		return indices.isComplete();
+	}
+
+	int Device::RateDeviceSuitability(VkPhysicalDevice device)
+	{
+		VkPhysicalDeviceProperties deviceProperties;
+		VkPhysicalDeviceFeatures deviceFeatures;
+		vkGetPhysicalDeviceProperties(device, &deviceProperties);
+		vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+
+		int score = 0;
+
+		// Discrete GPUs have a significant performance advantage
+		if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+			score += 1000;
+		}
+
+		// Maximum possible size of textures affects graphics quality
+		score += deviceProperties.limits.maxImageDimension2D;
+
+		// Application can't function without geometry shaders
+		if (!deviceFeatures.geometryShader) {
+			return 0;
+		}
+
+		return score;
+	}
+
+	QueueFamilyIndices Device::FindQueueFamilies(VkPhysicalDevice device)
+	{
+		QueueFamilyIndices indices;
+
+		uint32_t queueFamilyCount = 0;
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+		std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+		int i = 0;
+		for (const auto& queueFamily : queueFamilies) {
+			if (queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+				indices.graphicsFamily = i;
+			}
+
+			if (indices.isComplete()) {
+				break;
+			}
+
+			i++;
+		}
+
+		return indices;
 	}
 
 #if VK_USE_PLATFORM_WIN32_KHR

@@ -3,6 +3,14 @@
 
 namespace Caustix
 {
+	struct QueueFamilyIndices {
+		std::optional<uint32_t> graphicsFamily;
+
+		bool isComplete() {
+			return graphicsFamily.has_value();
+		}
+	};
+
 	class Device
 	{
 	public:
@@ -12,7 +20,8 @@ namespace Caustix
 	private:
 
 
-		VkInstance	instance = VK_NULL_HANDLE;
+		VkInstance								instance				= VK_NULL_HANDLE;
+		VkPhysicalDevice						physicalDevice			= VK_NULL_HANDLE;
 
 		std::vector<const char*> instanceLayers;
 		std::vector<const char*> instanceExtensions;
@@ -32,6 +41,18 @@ namespace Caustix
 		void DeInitDebug();
 
 		void InitInstance();
+		void DeInitInstance();
+
+		void InitDevice();
+		void DeInitDevice();
+
+		void PickPhysicalDevice(std::vector<VkPhysicalDevice> gpuList);
+		bool IsDeviceSuitable(VkPhysicalDevice device);
+		int RateDeviceSuitability(VkPhysicalDevice device);
+		QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
+
 		void AddRequiredPlatformInstanceExtensions(std::vector<const char *> *instance_extensions);
 	};
+
+	
 }
