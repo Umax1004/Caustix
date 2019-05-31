@@ -60,7 +60,8 @@ project "Caustix"
         {
             "CX_PLATFORM_WINDOWS",
             "CX_BUILD_DLL",
-            "CX_ENABLE_ASSERTS"
+            "CX_ENABLE_ASSERTS",
+            "VK_USE_PLATFORM_WIN32_KHR"
         }
 
         postbuildcommands
@@ -98,7 +99,8 @@ project "Sandbox"
     includedirs
 	{
         "Caustix/vendor/spdlog/include",
-        "Caustix/src"
+        "Caustix/src",
+        vul_path .. "/Include",
     }
 
     links 

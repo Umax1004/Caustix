@@ -79,7 +79,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>cxpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>CX_PLATFORM_WINDOWS;CX_BUILD_DLL;CX_ENABLE_ASSERTS;CX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CX_PLATFORM_WINDOWS;CX_BUILD_DLL;CX_ENABLE_ASSERTS;VK_USE_PLATFORM_WIN32_KHR;CX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\Include;vendor\glfw\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -101,7 +101,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>cxpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>CX_PLATFORM_WINDOWS;CX_BUILD_DLL;CX_ENABLE_ASSERTS;CX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CX_PLATFORM_WINDOWS;CX_BUILD_DLL;CX_ENABLE_ASSERTS;VK_USE_PLATFORM_WIN32_KHR;CX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\Include;vendor\glfw\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -127,7 +127,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>cxpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>CX_PLATFORM_WINDOWS;CX_BUILD_DLL;CX_ENABLE_ASSERTS;CX_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CX_PLATFORM_WINDOWS;CX_BUILD_DLL;CX_ENABLE_ASSERTS;VK_USE_PLATFORM_WIN32_KHR;CX_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\Include;vendor\glfw\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -162,6 +162,7 @@
     <ClInclude Include="src\Caustix\Log.h" />
     <ClInclude Include="src\Caustix\Window.h" />
     <ClInclude Include="src\Platform\Vulkan\Device.h" />
+    <ClInclude Include="src\Platform\Vulkan\Shared.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\cxpch.h" />
   </ItemGroup>
@@ -171,6 +172,7 @@
     <ClCompile Include="src\Caustix\Layer\LayerStack.cpp" />
     <ClCompile Include="src\Caustix\Log.cpp" />
     <ClCompile Include="src\Platform\Vulkan\Device.cpp" />
+    <ClCompile Include="src\Platform\Vulkan\Shared.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\cxpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
