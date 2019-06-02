@@ -22,6 +22,10 @@ namespace Caustix
 
 		VkInstance								instance				= VK_NULL_HANDLE;
 		VkPhysicalDevice						physicalDevice			= VK_NULL_HANDLE;
+		VkDevice								device					= VK_NULL_HANDLE;
+		VkQueue									queue					= VK_NULL_HANDLE;
+
+		QueueFamilyIndices indices;
 
 		std::vector<const char*> instanceLayers;
 		std::vector<const char*> instanceExtensions;

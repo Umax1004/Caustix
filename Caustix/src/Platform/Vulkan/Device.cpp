@@ -19,6 +19,7 @@ namespace Caustix
 	{
 		DeInitDevice();
 		DeInitDebug();
+		DeInitInstance();
 	}
 
 	void Device::SetupLayersAndExtensions()
@@ -68,11 +69,62 @@ namespace Caustix
 			vkEnumeratePhysicalDevices(instance, &gpuCount, gpuList.data());
 			PickPhysicalDevice(gpuList);
 		}
+		{
+			uint32_t layerCount = 0;
+			vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+			std::vector<VkLayerProperties> layerPropertiesList(layerCount);
+			vkEnumerateInstanceLayerProperties(&layerCount, layerPropertiesList.data());
+			CX_CORE_TRACE("Instanced layer properties:");
+			for (auto &i : layerPropertiesList)
+			{
+				std::ostringstream stream;
+				stream << "  " << i.layerName << "\t\t | " << i.description;
+				CX_CORE_TRACE(stream.str());
+			}
+		}
+		{
+			uint32_t layerCount = 0;
+			vkEnumerateDeviceLayerProperties(physicalDevice, &layerCount, nullptr);
+			std::vector<VkLayerProperties> layerPropertiesList(layerCount);
+			vkEnumerateDeviceLayerProperties(physicalDevice, &layerCount, layerPropertiesList.data());
+			CX_CORE_TRACE("Device layer properties:");
+			for (auto &i : layerPropertiesList)
+			{
+				std::ostringstream stream;
+				stream << "  " << i.layerName << "\t\t | " << i.description;
+				CX_CORE_TRACE(stream.str());
+			}
+		}
+		float queuePriorities[]{ 1.0f };
+		indices = FindQueueFamilies(physicalDevice);
 
+		VkDeviceQueueCreateInfo queueCreateInfo = {};
+		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		queueCreateInfo.queueFamilyIndex = indices.graphicsFamily.value();
+		queueCreateInfo.queueCount = 1;
+		queueCreateInfo.pQueuePriorities = queuePriorities;
+
+		VkPhysicalDeviceFeatures deviceFeatures = {};
+
+		VkDeviceCreateInfo deviceCreateInfo{};
+		deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+		deviceCreateInfo.queueCreateInfoCount = 1;
+		deviceCreateInfo.pQueueCreateInfos = &queueCreateInfo;
+		//	deviceCreateInfo.enabledLayerCount = _deviceLayers.size();
+		//	deviceCreateInfo.ppEnabledLayerNames = _deviceLayers.data();
+		deviceCreateInfo.enabledExtensionCount = deviceExtensions.size();
+		deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
+		deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
+
+		VK_ERROR(vkCreateDevice(physicalDevice, &deviceCreateInfo, nullptr, &device));
+
+		vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &queue);
 	}
 
 	void Device::DeInitDevice()
 	{
+		vkDestroyDevice(device, nullptr);
+		device = VK_NULL_HANDLE;
 	}
 
 	void Device::PickPhysicalDevice(std::vector<VkPhysicalDevice> gpuList)
