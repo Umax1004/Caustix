@@ -1,0 +1,21 @@
+{
+    "name": "caustix",
+    "version": "1.0.0",
+    "dependencies": [
+      "tracy",
+      "cglm",
+      "nlohmann-json",
+      "stb",
+      "vulkan-memory-allocator",
+      "wyhash",
+      {
+        "name": "sdl2",
+        "features": ["vulkan"]
+      },
+      {
+        "name": "imgui",
+        "features": ["sdl2-binding"]
+      }
+    ]
+  }
+  
