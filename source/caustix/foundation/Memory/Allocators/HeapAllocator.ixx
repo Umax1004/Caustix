@@ -14,8 +14,8 @@ export namespace Caustix {
     struct HeapAllocator : public Allocator {
         ~HeapAllocator() override;
 
-        HeapAllocator() = delete;
-        explicit HeapAllocator(sizet size);
+        HeapAllocator() = default;
+        void Initialize(sizet size);
 
         void*   allocate(sizet size, sizet alignment) override;
         void*   allocate(sizet size, sizet alignment, cstring file, i32 line) override;
@@ -61,7 +61,7 @@ namespace Caustix {
         free( m_memory );
     }
 
-    HeapAllocator::HeapAllocator( sizet size ) {
+    void HeapAllocator::Initialize( sizet size ) {
         // Allocate
         m_memory = malloc( size );
         m_maxSize = size;

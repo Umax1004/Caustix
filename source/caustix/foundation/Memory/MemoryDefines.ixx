@@ -52,4 +52,8 @@ export namespace Caustix {
             }
         }
     };
+
+    struct MemoryServiceConfiguration {
+        sizet   m_maximumDynamicSize = 32 * 1024 * 1024;    // Defaults to max 32MB of dynamic memory.
+    };
 }
