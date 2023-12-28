@@ -5,6 +5,7 @@
       "tracy",
       "cglm",
       "nlohmann-json",
+      "spdlog",
       "stb",
       "vulkan-memory-allocator",
       "wyhash",

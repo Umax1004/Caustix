@@ -1,7 +1,7 @@
 #include "file.hpp"
 
 #include "foundation/memory.hpp"
-#include "foundation/assert.hpp"
+#include "foundation/Assert.hpp"
 #include "foundation/string.hpp"
 
 #if defined(_WIN64)
@@ -188,7 +188,7 @@ static bool string_ends_with_char( cstring s, char c ) {
 
 void file_open_directory( cstring path, Directory* out_directory ) {
 
-    // Open file trying to conver to full path instead of relative.
+    // Open file trying to convert to full path instead of relative.
     // If an error occurs, just copy the name.
     if ( file_resolve_to_full_path( path, out_directory->path, MAX_PATH ) == 0 ) {
         strcpy( out_directory->path, path );

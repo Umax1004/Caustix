@@ -1,7 +1,7 @@
 #pragma once
 
 #include "foundation/platform.hpp"
-#include "foundation/assert.hpp"
+#include "foundation/Assert.hpp"
 #include "foundation/hash_map.hpp"
 
 namespace raptor {

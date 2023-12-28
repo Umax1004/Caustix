@@ -1,31 +1,28 @@
-#pragma once
-
-#include "foundation/memory.hpp"
-#include "foundation/Assert.hpp"
-#include "foundation/bit.hpp"
+module;
 
 #include "wyhash.h"
 
-namespace raptor {
+export module foundation.hash_map;
+
+import foundation.bit;
+import foundation.platform;
+
+export namespace caustix {
 
 
     // Hash Map /////////////////////////////////////////////////////////////////
 
-    static const u64                k_iterator_end = u64_max;
+    constexpr u64                k_iterator_end = u64_max;
 
-    //
-    //
     struct FindInfo {
         u64                         offset;
         u64                         probe_length;
-    }; // struct FindInfo
+    };
 
-    //
-    //
     struct FindResult {
         u64                         index;
         bool                        free_index;  // States if the index is free or used.
-    }; // struct FindResult
+    };
 
     //
     // Iterator that stores the index of the entry.
@@ -34,11 +31,11 @@ namespace raptor {
 
         bool                        is_valid() const    { return index != k_iterator_end; }
         bool                        is_invalid() const  { return index == k_iterator_end; }
-    }; // struct FlatHashMapIterator
+    };
 
     // A single block of empty control bytes for tables without any slots allocated.
     // This enables removing a branch in the hot path of find().
-    i8*                             group_init_empty();
+    consteval i8*   group_init_empty();
 
 
     // Probing ////////////////////////////////////////////////////////////
@@ -163,14 +160,14 @@ namespace raptor {
 
     // Control byte ///////////////////////////////////////////////////////
     // Following Google's abseil library convetion - based on performance.
-    static const i8         k_control_bitmask_empty     = -128; //0b10000000;
-    static const i8         k_control_bitmask_deleted   = -2;   //0b11111110;
-    static const i8         k_control_bitmask_sentinel  = -1;   //0b11111111;
+    constexpr i8    k_control_bitmask_empty     = -128; //0b10000000;
+    constexpr i8    k_control_bitmask_deleted   = -2;   //0b11111110;
+    constexpr i8    k_control_bitmask_sentinel  = -1;   //0b11111111;
 
-    static bool             control_is_empty( i8 control )              { return control == k_control_bitmask_empty; }
-    static bool             control_is_full( i8 control )               { return control >= 0; }
-    static bool             control_is_deleted( i8 control )            { return control == k_control_bitmask_deleted; }
-    static bool             control_is_empty_or_deleted( i8 control )   { return control < k_control_bitmask_sentinel; }
+    constexpr bool  control_is_empty( i8 control )              { return control == k_control_bitmask_empty; }
+    constexpr bool  control_is_full( i8 control )               { return control >= 0; }
+    constexpr bool  control_is_deleted( i8 control )            { return control == k_control_bitmask_deleted; }
+    constexpr bool  control_is_empty_or_deleted( i8 control )   { return control < k_control_bitmask_sentinel; }
 
     // Hashing ////////////////////////////////////////////////////////////
 
@@ -198,13 +195,13 @@ namespace raptor {
         BitMask<uint32_t, kWidth> Match( i8 hash ) const {
             auto match = _mm_set1_epi8( hash );
             return BitMask<uint32_t, kWidth>(
-                _mm_movemask_epi8( _mm_cmpeq_epi8( match, ctrl ) ) );
+                    _mm_movemask_epi8( _mm_cmpeq_epi8( match, ctrl ) ) );
         }
 
         // Returns a bitmask representing the positions of empty slots.
         BitMask<uint32_t, kWidth> MatchEmpty() const {
 #if ABSL_INTERNAL_RAW_HASH_SET_HAVE_SSSE3
-    // This only works because kEmpty is -128.
+            // This only works because kEmpty is -128.
             return BitMask<uint32_t, kWidth>(
                 _mm_movemask_epi8( _mm_sign_epi8( ctrl, ctrl ) ) );
 #else
@@ -216,14 +213,14 @@ namespace raptor {
         BitMask<uint32_t, kWidth> MatchEmptyOrDeleted() const {
             auto special = _mm_set1_epi8( k_control_bitmask_sentinel );
             return BitMask<uint32_t, kWidth>(
-                _mm_movemask_epi8( _mm_cmpgt_epi8( special, ctrl ) ) );
+                    _mm_movemask_epi8( _mm_cmpgt_epi8( special, ctrl ) ) );
         }
 
         // Returns the number of trailing empty or deleted elements in the group.
         uint32_t CountLeadingEmptyOrDeleted() const {
             auto special = _mm_set1_epi8( k_control_bitmask_sentinel );
             return trailing_zeros_u32( static_cast< uint32_t >(
-                _mm_movemask_epi8( _mm_cmpgt_epi8( special, ctrl ) ) + 1 ) );
+                                               _mm_movemask_epi8( _mm_cmpgt_epi8( special, ctrl ) ) + 1 ) );
         }
 
         void ConvertSpecialToEmptyAndFullToDeleted( i8* dst ) const {
@@ -702,8 +699,8 @@ namespace raptor {
     // Grouping: implementation ///////////////////////////////////////////
     inline i8* group_init_empty() {
         alignas( 16 ) static constexpr i8 empty_group[] = {
-            k_control_bitmask_sentinel, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty,
-            k_control_bitmask_empty,    k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty };
+                k_control_bitmask_sentinel, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty,
+                k_control_bitmask_empty,    k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty, k_control_bitmask_empty };
         return const_cast< i8* >( empty_group );
     }
 
@@ -733,4 +730,4 @@ namespace raptor {
         offset &= mask;
     }
 
-} // namespace raptor
+}

@@ -1,9 +1,10 @@
-#pragma once
+export module foundation.array;
 
-#include "foundation/memory.hpp"
-#include "foundation/Assert.hpp"
+import foundation.assert;
+import foundation.memory;
 
-namespace raptor {
+
+export namespace caustix {
 
     // Data structures ////////////////////////////////////////////////////
 
@@ -120,25 +121,25 @@ namespace raptor {
 
     template<typename T>
     inline void Array<T>::pop() {
-        RASSERT( size > 0 );
+        CASSERT( size > 0 );
         --size;
     }
 
     template<typename T>
     inline void Array<T>::delete_swap( u32 index ) {
-        RASSERT( size > 0 && index < size );
+        CASSERT( size > 0 && index < size );
         data[ index ] = data[ --size ];
     }
 
     template<typename T>
     inline T& Array<T>::operator []( u32 index ) {
-        RASSERT( index < size );
+        CASSERT( index < size );
         return data[ index ];
     }
 
     template<typename T>
     inline const T& Array<T>::operator []( u32 index ) const {
-        RASSERT( index < size );
+        CASSERT( index < size );
         return data[ index ];
     }
 
@@ -183,25 +184,25 @@ namespace raptor {
 
     template<typename T>
     inline T& Array<T>::back() {
-        RASSERT( size );
+        CASSERT( size );
         return data[ size - 1 ];
     }
 
     template<typename T>
     inline const T& Array<T>::back() const {
-        RASSERT( size );
+        CASSERT( size );
         return data[ size - 1 ];
     }
 
     template<typename T>
     inline T& Array<T>::front() {
-        RASSERT( size );
+        CASSERT( size );
         return data[ 0 ];
     }
 
     template<typename T>
     inline const T& Array<T>::front() const {
-        RASSERT( size );
+        CASSERT( size );
         return data[ 0 ];
     }
 
@@ -218,7 +219,7 @@ namespace raptor {
     // ArrayView //////////////////////////////////////////////////////////
     template<typename T>
     inline ArrayView<T>::ArrayView( T* data_, u32 size_ )
-        : data( data_ ), size( size_ ) {
+            : data( data_ ), size( size_ ) {
     }
 
     template<typename T>
@@ -229,13 +230,13 @@ namespace raptor {
 
     template<typename T>
     inline T& ArrayView<T>::operator[]( u32 index ) {
-        RASSERT( index < size );
+        CASSERT( index < size );
         return data[ index ];
     }
 
     template<typename T>
     inline const T& ArrayView<T>::operator[]( u32 index ) const {
-        RASSERT( index < size );
+        CASSERT( index < size );
         return data[ index ];
     }
 

@@ -27,7 +27,7 @@
 
 #include <stdlib.h> // for exit()
 
-#include "foundation/assert.hpp"
+#include "foundation/Assert.hpp"
 
 ///////////////////////////////////////
 

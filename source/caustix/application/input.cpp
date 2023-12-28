@@ -1,7 +1,7 @@
 
 #include "input.hpp"
 
-#include "foundation/assert.hpp"
+#include "foundation/Assert.hpp"
 #include "imgui.h"
 
 #include <cmath>

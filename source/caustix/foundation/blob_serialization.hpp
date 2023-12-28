@@ -2,7 +2,7 @@
 
 #include "foundation/platform.hpp"
 #include "foundation/memory.hpp"
-#include "foundation/assert.hpp"
+#include "foundation/Assert.hpp"
 #include "foundation/array.hpp"
 #include "foundation/relative_data_structures.hpp"
 

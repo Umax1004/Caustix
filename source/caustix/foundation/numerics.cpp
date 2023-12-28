@@ -3,7 +3,7 @@
 #include <cmath>
 #include <stdlib.h>
 
-#include "foundation/assert.hpp"
+#include "foundation/Assert.hpp"
 #include "foundation/log.hpp"
 
 namespace raptor {
