@@ -6,6 +6,7 @@ module;
 export module Foundation.Memory.MemoryDefines;
 
 import Foundation.Memory.Allocators.Allocator;
+import Foundation.Platform;
 
 export namespace Caustix {
     template <typename A>
@@ -37,4 +38,18 @@ export namespace Caustix {
     constexpr sizet cgiga(sizet size) {
         return size * 1024 * 1024 * 1024;
     }
+
+    struct MemoryStatistics {
+        sizet   m_allocatedBytes;
+        sizet   m_totalBytes;
+
+        u32     m_allocationCount;
+
+        void add( sizet a ) {
+            if ( a ) {
+                m_allocatedBytes += a;
+                ++m_allocationCount;
+            }
+        }
+    };
 }

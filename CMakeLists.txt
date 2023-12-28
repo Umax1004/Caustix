@@ -95,6 +95,7 @@ add_library(CaustixFoundation STATIC
 		Source/Caustix/Foundation/glTF.ixx
 		Source/Caustix/Foundation/File.ixx
 		Source/Caustix/Foundation/Memory/MemoryDefines.ixx
+		Source/Caustix/Foundation/Memory/Allocators/HeapAllocator.ixx
 		#		source/caustix/foundation/time.ixx
 #		source/caustix/foundation/hash_map.ixx
 )
