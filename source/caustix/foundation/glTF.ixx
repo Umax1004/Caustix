@@ -10,6 +10,8 @@ export module Foundation.glTF;
 import Foundation.Memory.MemoryDefines;
 import Foundation.Memory.Allocators.Allocator;
 import Foundation.Memory.Allocators.LinearAllocator;
+import Foundation.Services.MemoryService;
+import Foundation.Services.ServiceManager;
 import Foundation.Assert;
 import Foundation.Log;
 import Foundation.Platform;
@@ -884,12 +886,11 @@ namespace Caustix {
         glTF::glTF result(cmega(2));
 
         if (std::filesystem::exists(filePath)) {
-            info("Error: file %s does not exists.\n", filePath);
+            info("Error: file {} does not exists.\n", filePath);
             return result;
         }
 
-        // TODO: Finish Implementing this
-        Allocator* heapAllocator;
+        Allocator* heapAllocator = &ServiceManager::GetInstance()->Get<MemoryService>()->m_systemAllocator;
 
         FileReadResult readResult = FileReadText(filePath, heapAllocator);
 
@@ -928,6 +929,8 @@ namespace Caustix {
                 LoadAnimations( gltfData, result, allocator );
             }
         }
+
+        heapAllocator->deallocate(readResult.data);
 
         return result;
     }

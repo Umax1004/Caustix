@@ -10,7 +10,7 @@ export namespace Caustix {
     struct LinearAllocator : public Allocator {
         ~LinearAllocator() override;
 
-        LinearAllocator() = delete;
+        LinearAllocator() = default;
         explicit LinearAllocator(sizet size);
 
         void*   allocate( sizet size, sizet alignment ) override;

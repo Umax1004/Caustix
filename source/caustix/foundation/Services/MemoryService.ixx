@@ -2,7 +2,7 @@ module;
 
 #include <memory>
 
-export module Foundation.Memory.MemoryService;
+export module Foundation.Services.MemoryService;
 
 import Foundation.Memory.Allocators.LinearAllocator;
 import Foundation.Memory.Allocators.HeapAllocator;
@@ -12,13 +12,14 @@ import Foundation.Platform;
 
 export namespace Caustix {
     struct MemoryService : public Service {
-        void Initialize(MemoryServiceConfiguration configuration);
+        MemoryService() = delete;
+        MemoryService(MemoryServiceConfiguration configuration);
         // Frame allocator
         LinearAllocator m_scratchAllocator;
         HeapAllocator m_systemAllocator;
 
-        static MemoryService* GetInstance() {
-            static std::unique_ptr<MemoryService> instance;
+        static MemoryService* Create(MemoryServiceConfiguration configuration) {
+            static std::unique_ptr<MemoryService> instance{new MemoryService(configuration)};
             return instance.get();
         }
 
@@ -27,8 +28,6 @@ export namespace Caustix {
 }
 
 namespace Caustix {
-    void MemoryService::Initialize(Caustix::MemoryServiceConfiguration configuration)
-    {
-        m_systemAllocator.Initialize(configuration.m_maximumDynamicSize);
-    }
+    MemoryService::MemoryService(Caustix::MemoryServiceConfiguration configuration)
+    : m_systemAllocator(configuration.m_maximumDynamicSize) {}
 }

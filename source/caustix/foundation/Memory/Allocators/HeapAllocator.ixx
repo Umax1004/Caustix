@@ -14,8 +14,8 @@ export namespace Caustix {
     struct HeapAllocator : public Allocator {
         ~HeapAllocator() override;
 
-        HeapAllocator() = default;
-        void Initialize(sizet size);
+        HeapAllocator() = delete;
+        HeapAllocator(sizet size);
 
         void*   allocate(sizet size, sizet alignment) override;
         void*   allocate(sizet size, sizet alignment, cstring file, i32 line) override;
@@ -47,7 +47,7 @@ namespace Caustix {
         if ( stats.m_allocatedBytes ) {
             error( "HeapAllocator Shutdown.\n===============\nFAILURE! Allocated memory detected. allocated %llu, total %llu\n===============\n\n", stats.m_allocatedBytes, stats.m_totalBytes );
         } else {
-            info( "HeapAllocator Shutdown - all memory free!\n" );
+            info( "HeapAllocator Shutdown - all memory free!" );
         }
 
         if (stats.m_allocatedBytes != 0)
@@ -61,7 +61,7 @@ namespace Caustix {
         free( m_memory );
     }
 
-    void HeapAllocator::Initialize( sizet size ) {
+    HeapAllocator::HeapAllocator( sizet size ) {
         // Allocate
         m_memory = malloc( size );
         m_maxSize = size;
@@ -69,7 +69,7 @@ namespace Caustix {
 
         m_tlsfHandle = tlsf_create_with_pool( m_memory, size );
 
-        info( "HeapAllocator of size %llu created\n", size );
+        info( "HeapAllocator of size {} created", size );
     }
 
     void* HeapAllocator::allocate( sizet size, sizet alignment ) {

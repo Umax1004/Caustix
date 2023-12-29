@@ -99,6 +99,7 @@ add_library(CaustixFoundation STATIC
 		Source/Caustix/Foundation/Services/ServiceManager.ixx
 		Source/Caustix/Foundation/Services/Service.ixx
 		Source/Caustix/Foundation/Services/MemoryService.ixx
+		Source/Caustix/Foundation/Numerics.ixx
 		#		source/caustix/foundation/time.ixx
 #		source/caustix/foundation/hash_map.ixx
 )
@@ -114,8 +115,29 @@ target_compile_definitions(CaustixFoundation PRIVATE
 )
 
 target_include_directories(CaustixFoundation PRIVATE
-    source
-    source/caustix
+    Source
+    Source/Caustix
+)
+
+add_library(CaustixApp STATIC
+		Source/Caustix/Application/Window.ixx
+		Source/Caustix/Application/Input.ixx
+		Source/Caustix/Application/Keys.ixx
+)
+
+set_property(TARGET CaustixApp PROPERTY CXX_STANDARD 23)
+
+target_compile_definitions(CaustixApp PRIVATE
+		_CRT_SECURE_NO_WARNINGS
+
+		TRACY_ENABLE
+		TRACY_ON_DEMAND
+		TRACY_NO_SYSTEM_TRACING
+)
+
+target_include_directories(CaustixApp PRIVATE
+		Source
+		Source/Caustix
 )
 
 add_library(CaustixExternal SHARED
@@ -141,5 +163,5 @@ target_link_libraries(CaustixExternal PUBLIC
 set_property(TARGET CaustixExternal PROPERTY CXX_STANDARD 23)
 
 target_link_libraries(CaustixFoundation PUBLIC CaustixExternal)
-
+target_link_libraries(CaustixApp PUBLIC CaustixExternal)
 add_subdirectory(source/test)

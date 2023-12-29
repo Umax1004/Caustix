@@ -2,6 +2,7 @@ module;
 
 #include <concepts>
 #include <source_location>
+#include "External/tlsf/tlsf.h"
 
 export module Foundation.Memory.MemoryDefines;
 
@@ -38,6 +39,8 @@ export namespace Caustix {
     constexpr sizet cgiga(sizet size) {
         return size * 1024 * 1024 * 1024;
     }
+
+    size_t s_size = cmega(32) + tlsf_size() + 8;
 
     struct MemoryStatistics {
         sizet   m_allocatedBytes;
