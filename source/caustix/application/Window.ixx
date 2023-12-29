@@ -11,7 +11,6 @@ module;
 
 export module Application.Window;
 
-import Foundation.Platform;
 import Foundation.Memory.Allocators.Allocator;
 import Foundation.Services.Service;
 import Foundation.Log;

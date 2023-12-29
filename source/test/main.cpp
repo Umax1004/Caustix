@@ -16,19 +16,31 @@ import Application.Window;
 
 using StringBuffer = std::basic_string<char, std::char_traits<char>, Caustix::STLAdaptor<char>>;
 
+static void InputOsMessagesCallback( void* os_event, void* user_data ) {
+    Caustix::InputService* input = ( Caustix::InputService* )user_data;
+    input->OnEvent( os_event );
+}
+
 int main( int argc, char** argv ) {
-    Caustix::StackAllocator instanceAllocator(Caustix::cmega(2));
-    Caustix::ServiceManager::GetInstance()->AddService(Caustix::MemoryService::Create({Caustix::cmega(2)}), Caustix::MemoryService::m_name);
+    Caustix::StackAllocator scratchAllocator(Caustix::cmega(8));
+
+    Caustix::MemoryServiceConfiguration configuration;
+    Caustix::ServiceManager::GetInstance()->AddService(Caustix::MemoryService::Create(configuration), Caustix::MemoryService::m_name);
     Caustix::Allocator* allocator = &Caustix::ServiceManager::GetInstance()->Get<Caustix::MemoryService>()->m_systemAllocator;
 
-    Caustix::WindowConfiguration wconf{ 1280, 800, "Raptor Test", allocator };
+    Caustix::WindowConfiguration wconf{ 1280, 800, "Caustix Test", allocator };
     Caustix::ServiceManager::GetInstance()->AddService(Caustix::Window::Create(wconf), Caustix::Window::m_name);
     Caustix::Window* window = Caustix::ServiceManager::GetInstance()->Get<Caustix::Window>();
 
     Caustix::ServiceManager::GetInstance()->AddService(Caustix::InputService::Create(allocator), Caustix::InputService::m_name);
     Caustix::InputService* inputHandler = Caustix::ServiceManager::GetInstance()->Get<Caustix::InputService>();
+
+    // Callback register
+    window->RegisterOsMessagesCallback(InputOsMessagesCallback, inputHandler);
 //    window->RegisterOsMessagesCallback()
 //    auto memory = Caustix::MemoryService::GetInstance();
 //    Caustix::StackAllocator scratchAllocator(Caustix::cmega(8));
+
+    window->UnregisterOsMessagesCallback(InputOsMessagesCallback);
     return 0;
 }

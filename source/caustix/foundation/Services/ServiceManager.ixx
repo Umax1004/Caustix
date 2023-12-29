@@ -49,7 +49,7 @@ namespace Caustix {
 
     Service* ServiceManager::GetService(cstring name) {
         u64 hashName = m_hasher(name);
-        return m_services.at(hashName);
+        return m_services[hashName];
     }
 
     template<typename T>

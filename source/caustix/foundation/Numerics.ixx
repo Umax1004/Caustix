@@ -4,7 +4,7 @@ module;
 
 export module Foundation.Numerics;
 
-import Foundation.Platform;
+export import Foundation.Platform;
 import Foundation.Assert;
 import Foundation.Log;
 

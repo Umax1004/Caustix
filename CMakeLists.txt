@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.28)
 
 if(WIN32)
 	include(FetchContent)
@@ -11,6 +11,8 @@ endif()
 set(CMAKE_TOOLCHAIN_FILE ${vcpkg_SOURCE_DIR}/scripts/buildsystems/vcpkg.cmake CACHE STRING "CMake toolchain file")
 
 set(CMAKE_CXX_STANDARD 23)
+
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 if(WIN32)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -123,6 +125,8 @@ add_library(CaustixApp STATIC
 		Source/Caustix/Application/Window.ixx
 		Source/Caustix/Application/Input.ixx
 		Source/Caustix/Application/Keys.ixx
+		Source/Caustix/Application/Graphics/GPUDefines.ixx
+		Source/Caustix/Application/Graphics/GPUResources.ixx
 )
 
 set_property(TARGET CaustixApp PROPERTY CXX_STANDARD 23)
@@ -138,6 +142,7 @@ target_compile_definitions(CaustixApp PRIVATE
 target_include_directories(CaustixApp PRIVATE
 		Source
 		Source/Caustix
+		${Vulkan_INCLUDE_DIRS}
 )
 
 add_library(CaustixExternal SHARED
@@ -149,6 +154,7 @@ find_path(WYHASH_INCLUDE_DIRS "wyhash.h")
 target_include_directories(CaustixExternal PRIVATE
 	${Stb_INCLUDE_DIR}
 	${WYHASH_INCLUDE_DIRS}
+	${Vulkan_INCLUDE_DIRS}
 )
 
 target_link_libraries(CaustixExternal PUBLIC
@@ -157,7 +163,8 @@ target_link_libraries(CaustixExternal PUBLIC
 #		nlohmann_json::nlohmann_json
 	spdlog::spdlog
 #	Tracy::TracyClient
-#	GPUOpen::VulkanMemoryAllocator
+	GPUOpen::VulkanMemoryAllocator
+	${Vulkan_LIBRARIES}
 )
 
 set_property(TARGET CaustixExternal PROPERTY CXX_STANDARD 23)
