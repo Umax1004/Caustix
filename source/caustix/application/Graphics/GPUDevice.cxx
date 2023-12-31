@@ -43,6 +43,7 @@ constexpr const T& caustix_max( const T& a, const T& b ) {
 
 module Application.Graphics.GPUDevice;
 
+import Application.Graphics.CommandBuffer;
 import Foundation.Process;
 import Foundation.File;
 

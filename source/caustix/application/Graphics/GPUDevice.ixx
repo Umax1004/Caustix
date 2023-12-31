@@ -9,7 +9,6 @@ module;
 export module Application.Graphics.GPUDevice;
 
 export import Application.Graphics.GPUResources;
-import Application.Graphics.CommandBuffer;
 
 import Foundation.Memory.Allocators.Allocator;
 import Foundation.Memory.Allocators.StackAllocator;

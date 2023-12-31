@@ -129,6 +129,7 @@ add_library(CaustixApp STATIC
 		Source/Caustix/Application/Graphics/GPUDefines.ixx
 		Source/Caustix/Application/Graphics/GPUResources.ixx
 		Source/Caustix/Application/Graphics/GPUDevice.ixx
+		Source/Caustix/Application/Graphics/CommandBuffer.cxx
 		Source/Caustix/Application/Graphics/GPUDevice.cxx
 		Source/Caustix/Application/Graphics/CommandBuffer.ixx
 )
