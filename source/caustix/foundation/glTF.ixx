@@ -18,7 +18,20 @@ import Foundation.Platform;
 import Foundation.File;
 
 export namespace Caustix {
+
+    void InjectDefault3DModel(int& argc, char** argv) {
+        static const char* kDefault3DModel = "../../../Models/2.0/Sponza/glTF/Sponza.gltf";
+        if (std::filesystem::exists(kDefault3DModel)) {
+            argc = 2;
+            argv[1] = const_cast<char*>(kDefault3DModel);
+        }
+        else {
+           exit(-1);
+        }
+    }
+
     using StringBuffer = std::basic_string<char, std::char_traits<char>, STLAdaptor<char>>;
+
     namespace glTF {
         constexpr i32 INVALID_INT_VALUE = 2147483647;
         static_assert(INVALID_INT_VALUE == i32_max, "Mismatch between invalid int and i32 max");

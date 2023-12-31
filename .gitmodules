@@ -1,3 +1,6 @@
 [submodule "Source/External/tlsf"]
 	path = Source/External/tlsf
 	url = https://github.com/mattconte/tlsf.git
+[submodule "Models"]
+	path = Models
+	url = https://github.com/KhronosGroup/glTF-Sample-Models.git

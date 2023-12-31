@@ -10,6 +10,8 @@ import Foundation.Memory.MemoryDefines;
 import Foundation.Services.MemoryService;
 import Foundation.Services.ServiceManager;
 import Foundation.Services.Service;
+import Foundation.glTF;
+import Foundation.Log;
 
 import Application.Input;
 import Application.Window;
@@ -23,6 +25,12 @@ static void InputOsMessagesCallback( void* os_event, void* user_data ) {
 }
 
 int main( int argc, char** argv ) {
+
+    if ( argc < 2 ) {
+        Caustix::info( "Usage: chapter1 [path to glTF model]");
+        Caustix::InjectDefault3DModel(argc, argv);
+    }
+
     Caustix::StackAllocator scratchAllocator(Caustix::cmega(8));
 
     Caustix::MemoryServiceConfiguration configuration;
