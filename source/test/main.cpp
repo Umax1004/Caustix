@@ -13,6 +13,7 @@ import Foundation.Services.Service;
 
 import Application.Input;
 import Application.Window;
+import Application.Graphics.GPUDevice;
 
 using StringBuffer = std::basic_string<char, std::char_traits<char>, Caustix::STLAdaptor<char>>;
 
@@ -37,9 +38,12 @@ int main( int argc, char** argv ) {
 
     // Callback register
     window->RegisterOsMessagesCallback(InputOsMessagesCallback, inputHandler);
-//    window->RegisterOsMessagesCallback()
-//    auto memory = Caustix::MemoryService::GetInstance();
-//    Caustix::StackAllocator scratchAllocator(Caustix::cmega(8));
+
+    // Graphics
+    Caustix::DeviceCreation deviceCreation;
+    deviceCreation.SetWindow( window->m_width, window->m_height, window->m_platformHandle ).SetAllocator( allocator ).SetLinearAllocator( &scratchAllocator );
+    Caustix::ServiceManager::GetInstance()->AddService(Caustix::GpuDevice::Create(deviceCreation), Caustix::GpuDevice::m_name);
+    Caustix::GpuDevice* gpu = Caustix::ServiceManager::GetInstance()->Get<Caustix::GpuDevice>();
 
     window->UnregisterOsMessagesCallback(InputOsMessagesCallback);
     return 0;

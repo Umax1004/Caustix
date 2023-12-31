@@ -64,7 +64,7 @@ namespace Caustix {
             info( "Resource pool has unfreed resources.\n" );
 
             for ( u32 i = 0; i < m_freeIndicesHead; ++i ) {
-                info( "\tResource %u\n", m_freeIndices[ i ] );
+                info( "\tResource {}", m_freeIndices[ i ] );
             }
         }
 

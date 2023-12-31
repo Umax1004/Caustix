@@ -102,6 +102,7 @@ add_library(CaustixFoundation STATIC
 		Source/Caustix/Foundation/Services/Service.ixx
 		Source/Caustix/Foundation/Services/MemoryService.ixx
 		Source/Caustix/Foundation/Numerics.ixx
+		Source/Caustix/Foundation/Process.ixx
 		#		source/caustix/foundation/time.ixx
 #		source/caustix/foundation/hash_map.ixx
 )
@@ -127,6 +128,9 @@ add_library(CaustixApp STATIC
 		Source/Caustix/Application/Keys.ixx
 		Source/Caustix/Application/Graphics/GPUDefines.ixx
 		Source/Caustix/Application/Graphics/GPUResources.ixx
+		Source/Caustix/Application/Graphics/GPUDevice.ixx
+		Source/Caustix/Application/Graphics/GPUDevice.cxx
+		Source/Caustix/Application/Graphics/CommandBuffer.ixx
 )
 
 set_property(TARGET CaustixApp PROPERTY CXX_STANDARD 23)
@@ -164,6 +168,8 @@ target_link_libraries(CaustixExternal PUBLIC
 	spdlog::spdlog
 #	Tracy::TracyClient
 	GPUOpen::VulkanMemoryAllocator
+		$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+		$<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 	${Vulkan_LIBRARIES}
 )
 

@@ -5,7 +5,7 @@ module;
 
 export module Application.Graphics.GPUResources;
 
-import Application.Graphics.GPUDefines;
+export import Application.Graphics.GPUDefines;
 
 import Foundation.Memory.Allocators.Allocator;
 import Foundation.Platform;
@@ -671,7 +671,7 @@ export namespace Caustix {
     };
 
     // Enum translations. Use tables or switches depending on the case. ///////
-    consteval cstring ToCompilerExtension( VkShaderStageFlagBits value ) {
+    cstring ToCompilerExtension( VkShaderStageFlagBits value ) {
         switch ( value ) {
             case VK_SHADER_STAGE_VERTEX_BIT:
                 return "vert";
@@ -684,7 +684,7 @@ export namespace Caustix {
         }
     }
 
-    consteval cstring ToStageDefines( VkShaderStageFlagBits value ) {
+    cstring ToStageDefines( VkShaderStageFlagBits value ) {
         switch ( value ) {
             case VK_SHADER_STAGE_VERTEX_BIT:
                 return "VERTEX";
@@ -697,31 +697,31 @@ export namespace Caustix {
         }
     }
 
-    consteval VkImageType TovkImageType( TextureType::Enum type ) {
-        constexpr VkImageType s_vk_target[ TextureType::Count ] = { VK_IMAGE_TYPE_1D, VK_IMAGE_TYPE_2D, VK_IMAGE_TYPE_3D, VK_IMAGE_TYPE_1D, VK_IMAGE_TYPE_2D, VK_IMAGE_TYPE_3D };
+    VkImageType TovkImageType( TextureType::Enum type ) {
+        static VkImageType s_vk_target[ TextureType::Count ] = { VK_IMAGE_TYPE_1D, VK_IMAGE_TYPE_2D, VK_IMAGE_TYPE_3D, VK_IMAGE_TYPE_1D, VK_IMAGE_TYPE_2D, VK_IMAGE_TYPE_3D };
         return s_vk_target[ type ];
     }
 
-    consteval VkImageViewType TovkImageViewType( TextureType::Enum type ) {
-        constexpr VkImageViewType s_vk_data[] = { VK_IMAGE_VIEW_TYPE_1D, VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_VIEW_TYPE_3D, VK_IMAGE_VIEW_TYPE_1D_ARRAY, VK_IMAGE_VIEW_TYPE_2D_ARRAY, VK_IMAGE_VIEW_TYPE_CUBE_ARRAY };
+    VkImageViewType TovkImageViewType( TextureType::Enum type ) {
+        static VkImageViewType s_vk_data[] = { VK_IMAGE_VIEW_TYPE_1D, VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_VIEW_TYPE_3D, VK_IMAGE_VIEW_TYPE_1D_ARRAY, VK_IMAGE_VIEW_TYPE_2D_ARRAY, VK_IMAGE_VIEW_TYPE_CUBE_ARRAY };
         return s_vk_data[ type ];
     }
 
-    consteval VkFormat TovkVertexFormat( VertexComponentFormat::Enum value ) {
+    VkFormat TovkVertexFormat( VertexComponentFormat::Enum value ) {
         // Float, Float2, Float3, Float4, Mat4, Byte, Byte4N, UByte, UByte4N, Short2, Short2N, Short4, Short4N, Uint, Uint2, Uint4, Count
-        constexpr VkFormat s_vk_vertex_formats[ VertexComponentFormat::Count ] = { VK_FORMAT_R32_SFLOAT, VK_FORMAT_R32G32_SFLOAT, VK_FORMAT_R32G32B32_SFLOAT, VK_FORMAT_R32G32B32A32_SFLOAT, /*MAT4 TODO*/VK_FORMAT_R32G32B32A32_SFLOAT,
+        static VkFormat s_vk_vertex_formats[ VertexComponentFormat::Count ] = { VK_FORMAT_R32_SFLOAT, VK_FORMAT_R32G32_SFLOAT, VK_FORMAT_R32G32B32_SFLOAT, VK_FORMAT_R32G32B32A32_SFLOAT, /*MAT4 TODO*/VK_FORMAT_R32G32B32A32_SFLOAT,
                                                                                 VK_FORMAT_R8_SINT, VK_FORMAT_R8G8B8A8_SNORM, VK_FORMAT_R8_UINT, VK_FORMAT_R8G8B8A8_UINT, VK_FORMAT_R16G16_SINT, VK_FORMAT_R16G16_SNORM,
                                                                                 VK_FORMAT_R16G16B16A16_SINT, VK_FORMAT_R16G16B16A16_SNORM, VK_FORMAT_R32_UINT, VK_FORMAT_R32G32_UINT, VK_FORMAT_R32G32B32A32_UINT };
 
         return s_vk_vertex_formats[ value ];
     }
 
-    consteval VkPipelineStageFlags TovkPipelineStage( PipelineStage::Enum value ) {
+    VkPipelineStageFlags TovkPipelineStage( PipelineStage::Enum value ) {
         constexpr VkPipelineStageFlags s_vk_values[] = { VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT };
         return s_vk_values[ value ];
     }
 
-    consteval VkAccessFlags UtilTovkAccessFlags( ResourceState state ) {
+    VkAccessFlags UtilTovkAccessFlags( ResourceState state ) {
         VkAccessFlags ret = 0;
         if ( state & RESOURCE_STATE_COPY_SOURCE ) {
             ret |= VK_ACCESS_TRANSFER_READ_BIT;
@@ -762,7 +762,7 @@ export namespace Caustix {
         return ret;
     }
 
-    consteval VkImageLayout UtilTovkImageLayout( ResourceState usage ) {
+    VkImageLayout UtilTovkImageLayout( ResourceState usage ) {
         if ( usage & RESOURCE_STATE_COPY_SOURCE )
             return VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 
@@ -794,7 +794,7 @@ export namespace Caustix {
     }
 
     // Determines pipeline stages involved for given accesses
-    consteval VkPipelineStageFlags UtilDeterminePipelineStageFlags( VkAccessFlags accessFlags, QueueType::Enum queueType ) {
+    VkPipelineStageFlags UtilDeterminePipelineStageFlags( VkAccessFlags accessFlags, QueueType::Enum queueType ) {
         VkPipelineStageFlags flags = 0;
 
         switch ( queueType ) {
