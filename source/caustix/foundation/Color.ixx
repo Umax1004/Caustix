@@ -1,4 +1,4 @@
-export module color;
+export module Foundation.Color;
 
 import Foundation.Platform;
 

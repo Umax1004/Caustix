@@ -2256,15 +2256,11 @@ namespace Caustix {
         vkDestroySwapchainKHR( vulkan_device, vulkan_swapchain, vulkan_allocation_callbacks );
     }
 
-    inline u64 hash_bytes( void* data, sizet length, sizet seed = 0) {
-        return wyhash( data, length, seed, _wyp );
-    }
-
     VkRenderPass GpuDevice::get_vulkan_render_pass( const RenderPassOutput& output, cstring name ) {
 
         // Hash the memory output and find a compatible VkRenderPass.
         // In current form RenderPassOutput should track everything needed, including load operations.
-        u64 hashed_memory = hash_bytes( ( void* )&output, sizeof( RenderPassOutput ) );
+        u64 hashed_memory = HashBytes( ( void* )&output, sizeof( RenderPassOutput ) );
         VkRenderPass vulkan_render_pass = render_pass_cache[ hashed_memory ];
         if ( vulkan_render_pass ) {
             return vulkan_render_pass;

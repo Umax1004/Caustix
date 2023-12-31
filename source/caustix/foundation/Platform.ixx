@@ -1,6 +1,8 @@
 module;
 
 #include <cstdint>
+#include <stdint.h>
+#include <wyhash.h>
 
 export module Foundation.Platform;
 
@@ -37,5 +39,25 @@ export {
     template <typename T, u32 N>
     constexpr u32 ArraySize(const T(&)[N]) noexcept {
         return N;
+    }
+
+    template<typename T>
+    inline u64 HashCalculate( const T& value, sizet seed = 0 ) {
+        return wyhash( &value, sizeof( T ), seed, _wyp );
+    }
+
+    template <size_t N>
+    inline u64 HashCalculate( const char( &value )[ N ], sizet seed = 0 ) {
+        return wyhash( value, strlen(value), seed, _wyp );
+    }
+
+    template <>
+    inline u64 HashCalculate( const cstring& value, sizet seed ) {
+        return wyhash( value, strlen( value ), seed, _wyp );
+    }
+
+    // Method to hash memory itself.
+    inline u64 HashBytes( void* data, sizet length, sizet seed = 0) {
+        return wyhash( data, length, seed, _wyp );
     }
 }

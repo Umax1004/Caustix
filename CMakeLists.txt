@@ -103,6 +103,7 @@ add_library(CaustixFoundation STATIC
 		Source/Caustix/Foundation/Services/MemoryService.ixx
 		Source/Caustix/Foundation/Numerics.ixx
 		Source/Caustix/Foundation/Process.ixx
+		Source/Caustix/Foundation/ResourceManager.ixx
 		#		source/caustix/foundation/time.ixx
 #		source/caustix/foundation/hash_map.ixx
 )
@@ -132,6 +133,7 @@ add_library(CaustixApp STATIC
 		Source/Caustix/Application/Graphics/CommandBuffer.cxx
 		Source/Caustix/Application/Graphics/GPUDevice.cxx
 		Source/Caustix/Application/Graphics/CommandBuffer.ixx
+		Source/Caustix/Application/Graphics/GPUProfiler.ixx
 )
 
 set_property(TARGET CaustixApp PROPERTY CXX_STANDARD 23)

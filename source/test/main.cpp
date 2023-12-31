@@ -12,10 +12,12 @@ import Foundation.Services.ServiceManager;
 import Foundation.Services.Service;
 import Foundation.glTF;
 import Foundation.Log;
+import Foundation.ResourceManager;
 
 import Application.Input;
 import Application.Window;
 import Application.Graphics.GPUDevice;
+import Application.Graphics.GPUProfiler;
 
 using StringBuffer = std::basic_string<char, std::char_traits<char>, Caustix::STLAdaptor<char>>;
 
@@ -52,6 +54,10 @@ int main( int argc, char** argv ) {
     deviceCreation.SetWindow( window->m_width, window->m_height, window->m_platformHandle ).SetAllocator( allocator ).SetLinearAllocator( &scratchAllocator );
     Caustix::ServiceManager::GetInstance()->AddService(Caustix::GpuDevice::Create(deviceCreation), Caustix::GpuDevice::m_name);
     Caustix::GpuDevice* gpu = Caustix::ServiceManager::GetInstance()->Get<Caustix::GpuDevice>();
+
+    Caustix::ResourceManager resourceManager(allocator, nullptr);
+
+    Caustix::GPUProfiler gpuProfiler( allocator, 100 );
 
     window->UnregisterOsMessagesCallback(InputOsMessagesCallback);
     return 0;
