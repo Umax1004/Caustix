@@ -540,7 +540,7 @@ namespace Caustix {
         }
     }
 
-    CommandBufferRing::~CommandBufferRing() {
+    void CommandBufferRing::Shutdown() {
         for (u32 i = 0; i < k_max_swapchain_images * k_max_threads; i++) {
             vkDestroyCommandPool(m_gpu->vulkan_device, m_vulkanCommandPools[i], m_gpu->vulkan_allocation_callbacks);
         }

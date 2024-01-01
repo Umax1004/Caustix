@@ -59,7 +59,6 @@ namespace Caustix {
     }
 
     ResourcePool::~ResourcePool() {
-
         if ( m_freeIndicesHead != 0 ) {
             info( "Resource pool has unfreed resources.\n" );
 

@@ -71,7 +71,7 @@ export namespace Caustix {
 
     struct CommandBufferRing {
         CommandBufferRing() = default;
-        ~CommandBufferRing();
+        void Shutdown();
         void Initialize( GpuDevice* gpu );
 
         void                    ResetPools( u32 frameIndex );

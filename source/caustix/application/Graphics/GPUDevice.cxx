@@ -556,11 +556,11 @@ namespace Caustix {
         return surface_supported;
     }
 
-    GpuDevice::~GpuDevice() {
+    void GpuDevice::Shutdown() {
 
         vkDeviceWaitIdle( vulkan_device );
 
-        command_buffer_ring.~CommandBufferRing();
+        command_buffer_ring.Shutdown();
 
         for ( size_t i = 0; i < k_max_swapchain_images; i++ ) {
             vkDestroySemaphore( vulkan_device, vulkan_render_complete_semaphore[ i ], vulkan_allocation_callbacks );
@@ -665,6 +665,7 @@ namespace Caustix {
 
         resource_deletion_queue.clear();
         descriptor_set_updates.clear();
+
 #ifdef VULKAN_DEBUG_REPORT
         // Remove the debug report callback
         //auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr( vulkan_instance, "vkDestroyDebugReportCallbackEXT" );
@@ -685,7 +686,6 @@ namespace Caustix {
 
         info( "Gpu Device shutdown" );
     }
-
 
     static void transition_image_layout( VkCommandBuffer command_buffer, VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, bool is_depth ) {
 

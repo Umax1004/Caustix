@@ -87,7 +87,9 @@ export namespace Caustix {
 
         // Constructor/Destructor methods
         explicit GpuDevice( const DeviceCreation& creation );
-        ~GpuDevice() {}
+        ~GpuDevice() = default;
+
+        void                            Shutdown();
 
         // Creation/Destruction of resources /////////////////////////////////
         BufferHandle                    create_buffer( const BufferCreation& creation );

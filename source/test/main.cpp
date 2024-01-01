@@ -59,6 +59,7 @@ int main( int argc, char** argv ) {
 
     Caustix::GPUProfiler gpuProfiler( allocator, 100 );
 
+    gpu->Shutdown();
     window->UnregisterOsMessagesCallback(InputOsMessagesCallback);
     return 0;
 }
