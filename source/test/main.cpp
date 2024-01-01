@@ -18,6 +18,7 @@ import Application.Input;
 import Application.Window;
 import Application.Graphics.GPUDevice;
 import Application.Graphics.GPUProfiler;
+import Application.Graphics.Renderer;
 
 using StringBuffer = std::basic_string<char, std::char_traits<char>, Caustix::STLAdaptor<char>>;
 
@@ -59,7 +60,13 @@ int main( int argc, char** argv ) {
 
     Caustix::GPUProfiler gpuProfiler( allocator, 100 );
 
-    gpu->Shutdown();
+    Caustix::ServiceManager::GetInstance()->AddService(Caustix::Renderer::Create({gpu, allocator}), Caustix::Renderer::m_name);
+    Caustix::Renderer* renderer = Caustix::ServiceManager::GetInstance()->Get<Caustix::Renderer>();
+    renderer->SetLoaders(&resourceManager);
+
+
+    renderer->Shutdown();
+    
     window->UnregisterOsMessagesCallback(InputOsMessagesCallback);
     return 0;
 }

@@ -31,6 +31,51 @@ export namespace Caustix {
         u32     m_resourceSize      = 4;
         u32     m_usedIndices       = 0;
     };
+
+    template <typename T>
+    struct ResourcePoolTyped : public ResourcePool {
+        ResourcePoolTyped( Allocator* allocator, u32 pool_size );
+        ~ResourcePoolTyped() = default;
+
+        T*                              Obtain();
+        void                            Release( T* resource );
+
+        T*                              Get( u32 index );
+        const T*                        Get( u32 index ) const;
+    };
+
+    template<typename T>
+    inline ResourcePoolTyped<T>::ResourcePoolTyped( Allocator* allocator_, u32 pool_size_ )
+    : ResourcePool( allocator_, pool_size_, sizeof( T ) ) {;
+    }
+
+    template<typename T>
+    inline T* ResourcePoolTyped<T>::Obtain() {
+        u32 resource_index = ResourcePool::ObtainResource();
+        if ( resource_index != u32_max ) {
+            T* resource = Get( resource_index );
+            resource->m_poolIndex = resource_index;
+            return resource;
+        }
+
+        return nullptr;
+    }
+
+    template<typename T>
+    inline void ResourcePoolTyped<T>::Release( T* resource ) {
+        ResourcePool::ReleaseResource( resource->m_poolIndex );
+    }
+
+    template<typename T>
+    inline T* ResourcePoolTyped<T>::Get( u32 index ) {
+        return ( T* )ResourcePool::AccessResource( index );
+    }
+
+    template<typename T>
+    inline const T* ResourcePoolTyped<T>::Get( u32 index ) const {
+        return ( const T* )ResourcePool::AccessResource( index );
+    }
+
 }
 
 namespace Caustix {
