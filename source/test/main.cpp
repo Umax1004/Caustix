@@ -19,6 +19,7 @@ import Application.Window;
 import Application.Graphics.GPUDevice;
 import Application.Graphics.GPUProfiler;
 import Application.Graphics.Renderer;
+import Application.Graphics.ImGuiService;
 
 using StringBuffer = std::basic_string<char, std::char_traits<char>, Caustix::STLAdaptor<char>>;
 
@@ -64,7 +65,10 @@ int main( int argc, char** argv ) {
     Caustix::Renderer* renderer = Caustix::ServiceManager::GetInstance()->Get<Caustix::Renderer>();
     renderer->SetLoaders(&resourceManager);
 
+    Caustix::ImGuiServiceConfiguration imGuiServiceConfiguration{ gpu, window->m_platformHandle };
+    Caustix::ImGuiService imGuiService(imGuiServiceConfiguration);
 
+    imGuiService.Shutdown();
     renderer->Shutdown();
     
     window->UnregisterOsMessagesCallback(InputOsMessagesCallback);

@@ -135,6 +135,7 @@ add_library(CaustixApp STATIC
 		Source/Caustix/Application/Graphics/CommandBuffer.ixx
 		Source/Caustix/Application/Graphics/GPUProfiler.ixx
 		Source/Caustix/Application/Graphics/Renderer.ixx
+		Source/Caustix/Application/Graphics/ImGuiService.ixx
 )
 
 set_property(TARGET CaustixApp PROPERTY CXX_STANDARD 23)

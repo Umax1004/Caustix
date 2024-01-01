@@ -85,7 +85,7 @@ namespace Caustix {
         } else {
             win32_get_error( &s_process_log_buffer[0], k_process_log_buffer );
 
-            error( "Execute process error.\n Exe: \"{}\" - Args: \"{}\" - Work_dir: \"{}\"", process_fullpath, arguments, working_directory );
+            error( "Execute process error.\n Exe: \"{}\"\n Args: \"{}\" - Work_dir: \"{}\"", process_fullpath, arguments, working_directory );
             info( "Message: {}", s_process_log_buffer );
         }
         CloseHandle( handle_stdin_pipe_read );
