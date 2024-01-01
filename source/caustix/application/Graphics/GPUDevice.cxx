@@ -949,12 +949,19 @@ namespace Caustix {
         for ( u32 i = 0; i < stage_define_length; ++i ) {
             stage_define[ i ] = toupper( stage_define[ i ] );
         }
+        temp_string_buffer.push_back('\0');
         // Compile to SPV
 #if defined(_MSC_VER)
-        char* glsl_compiler_path = temp_string_buffer.append(std::format( "{}glslangValidator.exe", vulkan_binaries_path )).data();
-        char* final_spirv_filename = temp_string_buffer.append( "shader_final.spv" ).data();
+        char* glsl_compiler_path = temp_string_buffer.data() + temp_string_buffer.size();
+        temp_string_buffer.append(std::format( "{}glslangValidator.exe", vulkan_binaries_path ));
+        temp_string_buffer.push_back('\0');
+        char* final_spirv_filename = temp_string_buffer.data() + temp_string_buffer.size();
+        temp_string_buffer.append( "shader_final.spv" );
+        temp_string_buffer.push_back('\0');
         // TODO: add optional debug information in shaders (option -g).
-        char* arguments = temp_string_buffer.append(std::format( "glslangValidator.exe {} -V --target-env vulkan1.2 -o {} -S {} --D {} --D {}", temp_filename, final_spirv_filename, ToCompilerExtension( stage ), stage_define, ToStageDefines( stage ) )).data();
+        char* arguments = temp_string_buffer.data() + temp_string_buffer.size();
+        temp_string_buffer.append(std::format( "glslangValidator.exe {} -V --target-env vulkan1.2 -o {} -S {} --D {} --D {}", temp_filename, final_spirv_filename, ToCompilerExtension( stage ), stage_define, ToStageDefines( stage ) ));
+        temp_string_buffer.push_back('\0');
 #else
         char* glsl_compiler_path = temp_string_buffer.append_use_f( "%sglslangValidator", vulkan_binaries_path );
     char* final_spirv_filename = temp_string_buffer.append_use( "shader_final.spv" );

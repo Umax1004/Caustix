@@ -108,8 +108,6 @@ namespace Caustix {
             execution_success = false;
         }
 
-        info( "\n" );
-
         // Close handles.
         CloseHandle( handle_stdout_pipe_read );
         CloseHandle( handle_stdin_pipe_write );
