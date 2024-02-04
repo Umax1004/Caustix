@@ -91,9 +91,9 @@ export namespace Caustix {
 
         SamplerResource*            CreateSampler( const SamplerCreation& creation );
 
-        void                        DestroyBuffer( BufferResource* buffer );
-        void                        DestroyTexture( TextureResource* texture );
-        void                        DestroySampler( SamplerResource* sampler );
+        void                        DestroyBuffer( BufferResource* buffer, bool erase );
+        void                        DestroyTexture( TextureResource* texture, bool erase );
+        void                        DestroySampler( SamplerResource* sampler, bool erase );
 
         // Update resources
         void*                       MapBuffer( BufferResource* buffer, u32 offset = 0, u32 size = 0 );
@@ -325,7 +325,7 @@ namespace Caustix {
         return nullptr;
     }
 
-    void Renderer::DestroyBuffer( BufferResource* buffer ) {
+    void Renderer::DestroyBuffer( BufferResource* buffer, bool erase = true ) {
         if ( !buffer ) {
             return;
         }
@@ -335,12 +335,14 @@ namespace Caustix {
             return;
         }
 
-        m_resourceCache.m_buffers.erase( HashCalculate( buffer->m_desc.m_name ) );
+        if (erase) {
+            m_resourceCache.m_buffers.erase( HashCalculate( buffer->m_desc.m_name ) );
+        }
         m_gpu->destroy_buffer( buffer->m_handle );
         m_buffers.Release( buffer );
     }
 
-    void Renderer::DestroyTexture( TextureResource* texture ) {
+    void Renderer::DestroyTexture( TextureResource* texture, bool erase = true ) {
         if ( !texture ) {
             return;
         }
@@ -350,12 +352,14 @@ namespace Caustix {
             return;
         }
 
-        m_resourceCache.m_textures.erase( HashCalculate( texture->m_desc.m_name ) );
+        if (erase) {
+            m_resourceCache.m_textures.erase( HashCalculate( texture->m_desc.m_name ) );
+        }
         m_gpu->destroy_texture( texture->m_handle );
         m_textures.Release( texture );
     }
 
-    void Renderer::DestroySampler( SamplerResource* sampler ) {
+    void Renderer::DestroySampler( SamplerResource* sampler, bool erase = true ) {
         if ( !sampler ) {
             return;
         }
@@ -365,7 +369,9 @@ namespace Caustix {
             return;
         }
 
-        m_resourceCache.m_samplers.erase( HashCalculate( sampler->m_desc.m_name ) );
+        if (erase) {
+            m_resourceCache.m_samplers.erase( HashCalculate( sampler->m_desc.m_name ) );
+        }
         m_gpu->destroy_sampler( sampler->m_handle );
         m_samplers.Release( sampler );
     }
@@ -461,28 +467,19 @@ namespace Caustix {
 
     void ResourceCache::Shutdown( Renderer* renderer ) {
 
-//        raptor::FlatHashMapIterator it = textures.iterator_begin();
-//
-//        while ( it.is_valid() ) {
-//            raptor::TextureResource* texture = textures.get( it );
-//            renderer->destroy_texture( texture );
-//
-//            textures.iterator_advance( it );
-//        }
-
-        for (auto it = m_textures.begin(); it != m_textures.end(); it++) {
-            TextureResource* texture = it->second;
-            renderer->DestroyTexture( texture );
+        for (auto [key, value]: m_textures) {
+            TextureResource* texture = value;
+            renderer->DestroyTexture( texture, false );
         }
 
-        for (auto it = m_buffers.begin(); it != m_buffers.end(); it++) {
-            BufferResource* buffer = it->second;
-            renderer->DestroyBuffer( buffer );
+        for (auto [key, value]: m_buffers) {
+            BufferResource* buffer = value;
+            renderer->DestroyBuffer( buffer, false );
         }
 
-        for (auto it = m_samplers.begin(); it != m_samplers.end(); it++) {
-            SamplerResource* sampler = it->second;
-            renderer->DestroySampler( sampler );
+        for (auto [key, value]: m_samplers) {
+            SamplerResource* sampler = value;
+            renderer->DestroySampler( sampler, false );
         }
 
         m_textures.clear();
