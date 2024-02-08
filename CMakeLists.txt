@@ -4,6 +4,7 @@ if(WIN32)
 	include(FetchContent)
 	FetchContent_Declare(vcpkg
 	                     GIT_REPOSITORY https://github.com/microsoft/vcpkg.git
+						 GIT_TAG 4be80ed896df92ff6752dcd7b34bf583334e27da
 	                     )
 	FetchContent_MakeAvailable(vcpkg)
 endif()
@@ -13,6 +14,8 @@ set(CMAKE_TOOLCHAIN_FILE ${vcpkg_SOURCE_DIR}/scripts/buildsystems/vcpkg.cmake CA
 set(CMAKE_CXX_STANDARD 23)
 
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(WIN32)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -30,7 +33,10 @@ find_package(Stb REQUIRED)
 find_package(Tracy CONFIG REQUIRED)
 find_package(VulkanMemoryAllocator CONFIG REQUIRED)
 
-add_library(CaustixFoundation STATIC
+add_library(CaustixFoundation)
+
+target_sources(CaustixFoundation PUBLIC
+		FILE_SET CXX_MODULES FILES
 #    source/caustix/foundation/array.hpp
 #    source/caustix/foundation/assert.cpp
 #		Source/Caustix/Foundation/Assert.hpp
@@ -123,20 +129,25 @@ target_include_directories(CaustixFoundation PRIVATE
     Source/Caustix
 )
 
-add_library(CaustixApp STATIC
+add_library(CaustixApp)
+
+target_sources(CaustixApp PUBLIC
+		FILE_SET CXX_MODULES FILES
 		Source/Caustix/Application/Window.ixx
 		Source/Caustix/Application/Input.ixx
 		Source/Caustix/Application/Keys.ixx
 		Source/Caustix/Application/Graphics/GPUDefines.ixx
 		Source/Caustix/Application/Graphics/GPUResources.ixx
 		Source/Caustix/Application/Graphics/GPUDevice.ixx
-		Source/Caustix/Application/Graphics/CommandBuffer.cxx
-		Source/Caustix/Application/Graphics/GPUDevice.cxx
 		Source/Caustix/Application/Graphics/CommandBuffer.ixx
 		Source/Caustix/Application/Graphics/GPUProfiler.ixx
 		Source/Caustix/Application/Graphics/Renderer.ixx
 		Source/Caustix/Application/Graphics/ImGuiService.ixx
 )
+
+target_sources(CaustixApp PUBLIC 
+		Source/Caustix/Application/Graphics/GPUDevice.cxx
+		Source/Caustix/Application/Graphics/CommandBuffer.cxx)
 
 set_property(TARGET CaustixApp PROPERTY CXX_STANDARD 23)
 
@@ -182,4 +193,5 @@ set_property(TARGET CaustixExternal PROPERTY CXX_STANDARD 23)
 
 target_link_libraries(CaustixFoundation PUBLIC CaustixExternal)
 target_link_libraries(CaustixApp PUBLIC CaustixExternal)
+target_link_libraries(CaustixApp PUBLIC CaustixFoundation)
 add_subdirectory(source/test)

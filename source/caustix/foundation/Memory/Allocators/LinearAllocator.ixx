@@ -8,7 +8,10 @@ import Foundation.Memory.Allocators.Allocator;
 
 export namespace Caustix {
     struct LinearAllocator : public Allocator {
-        ~LinearAllocator() override;
+        ~LinearAllocator() {
+            m_allocatedSize = 0;
+            free(m_memory);
+        };
 
         LinearAllocator() = default;
         explicit LinearAllocator(sizet size);
@@ -25,11 +28,6 @@ export namespace Caustix {
 }
 
 namespace Caustix {
-    LinearAllocator::~LinearAllocator() {
-        m_allocatedSize = 0;
-        free(m_memory);
-    }
-
     LinearAllocator::LinearAllocator(sizet size) {
         m_memory = (u8*)malloc( size );
         m_allocatedSize = 0;

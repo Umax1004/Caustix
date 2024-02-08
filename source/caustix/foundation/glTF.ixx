@@ -42,12 +42,6 @@ export namespace Caustix {
             StringBuffer generator;
             StringBuffer minVersion;
             StringBuffer version;
-
-            Asset(Allocator& allocator)
-            : copyright(allocator)
-            , generator(allocator)
-            , minVersion(allocator)
-            , version(allocator) {}
         };
 
         struct CameraOrthographic {
@@ -304,7 +298,7 @@ export namespace Caustix {
             Accessor*                   accessors;
             u32                         animations_count;
             Animation*                  animations;
-            Asset                       asset;
+            Asset*                      asset;
             u32                         buffer_views_count;
             BufferView*                 buffer_views;
             u32                         buffers_count;
@@ -333,17 +327,15 @@ export namespace Caustix {
             u32                         textures_count;
             Texture*                    textures;
 
-            LinearAllocator             allocator;
+            Allocator*                  allocator;
 
-            glTF(sizet size) : allocator(size), asset(allocator) {}
+            glTF(Allocator* allocator_) : allocator(allocator_) {}
         };
 
         i32                             GetDataOffset(i32 accessorOffset, i32 bufferViewOffset);
     }
 
-    glTF::glTF  gltfLoadFile( cstring filePath );
-
-    void        gltfFree( glTF::glTF& scene );
+    glTF::glTF  gltfLoadFile( cstring filePath, Allocator* allocator );
 
     i32         gltfGetAttributeAccessorIndex( glTF::MeshPrimitive::Attribute* attributes, u32 attributeCount, cstring attributeName );
 }
@@ -886,22 +878,24 @@ namespace Caustix {
         }
     }
 
-    static void LoadAsset( json& jsonData, glTF::Asset& asset, Allocator* allocator) {
+    static void LoadAsset( json& jsonData, glTF::glTF& gltfData, Allocator* allocator) {
         json jsonAsset = jsonData[ "asset" ];
 
-        TryLoadString(jsonAsset, "copyright", asset.copyright, allocator);
-        TryLoadString(jsonAsset, "generator", asset.generator, allocator);
-        TryLoadString(jsonAsset, "minVersion", asset.minVersion, allocator);
-        TryLoadString(jsonAsset, "version", asset.version, allocator);
+        gltfData.asset = ( glTF::Asset* )AllocateAndZero( allocator, sizeof( glTF::Asset ) );
+
+        TryLoadString(jsonAsset, "copyright", gltfData.asset->copyright, allocator);
+        TryLoadString(jsonAsset, "generator", gltfData.asset->generator, allocator);
+        TryLoadString(jsonAsset, "minVersion", gltfData.asset->minVersion, allocator);
+        TryLoadString(jsonAsset, "version", gltfData.asset->version, allocator);
     }
 
-    glTF::glTF gltfLoadFile(cstring filePath) {
-        glTF::glTF result(cmega(2));
+    glTF::glTF gltfLoadFile(cstring filePath, Allocator* allocator_) {
+        glTF::glTF result(allocator_);
 
-        if (std::filesystem::exists(filePath)) {
-            info("Error: file {} does not exists.\n", filePath);
-            return result;
-        }
+//        if (std::filesystem::exists(filePath) || true) {
+//            info("Error: file {} does not exists.\n", filePath);
+//            return result;
+//        }
 
         Allocator* heapAllocator = &ServiceManager::GetInstance()->Get<MemoryService>()->m_systemAllocator;
 
@@ -909,11 +903,11 @@ namespace Caustix {
 
         json gltfData = json::parse(readResult.data);
 
-        Allocator* allocator = &result.allocator;
+        Allocator* allocator = result.allocator;
 
         for (auto properties : gltfData.items()) {
             if (properties.key() == "asset") {
-                LoadAsset(gltfData, result.asset, allocator);
+                LoadAsset(gltfData, result, allocator);
             } else if (properties.key() == "scene") {
                 TryLoadInt(gltfData, "scene", result.scene);
             } else if ( properties.key() == "scenes" ) {
@@ -946,10 +940,6 @@ namespace Caustix {
         heapAllocator->deallocate(readResult.data);
 
         return result;
-    }
-
-    void gltfFree( glTF::glTF& scene ) {
-        scene.allocator.~LinearAllocator();
     }
 
     i32 gltfGetAttributeAccessorIndex( glTF::MeshPrimitive::Attribute* attributes, u32 attributeCount, cstring attributeName ) {

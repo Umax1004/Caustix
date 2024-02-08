@@ -9,6 +9,7 @@ export module Foundation.File;
 import Foundation.Memory.Allocators.Allocator;
 import Foundation.Memory.MemoryDefines;
 import Foundation.Platform;
+import Foundation.Log;
 
 export namespace Caustix {
     struct FileReadResult {
@@ -21,6 +22,9 @@ export namespace Caustix {
 
     FileReadResult  FileReadBinary(cstring filename, Allocator* allocator);
     FileReadResult  FileReadText(cstring filename, Allocator* allocator);
+
+    void FileDirectoryFromPath( char* path );
+    void FileNameFromPath( char* path );
 }
 
 namespace Caustix {
@@ -108,5 +112,40 @@ namespace Caustix {
         }
 
         return result;
+    }
+
+    void FileDirectoryFromPath( char* path ) {
+        char* last_point = strrchr( path, '.' );
+        char* last_separator = strrchr( path, '/' );
+        if ( last_separator != nullptr && last_point > last_separator ) {
+            *(last_separator + 1) = 0;
+        }
+        else {
+            // Try searching backslash
+            last_separator = strrchr( path, '\\' );
+            if ( last_separator != nullptr && last_point > last_separator ) {
+                *( last_separator + 1 ) = 0;
+            }
+            else {
+                // Wrong input!
+                error("Malformed path {}!", path );
+                CASSERT( false);
+            }
+
+        }
+    }
+
+    void FileNameFromPath( char* path ) {
+        char* last_separator = strrchr( path, '/' );
+        if ( last_separator == nullptr ) {
+            last_separator = strrchr( path, '\\' );
+        }
+
+        if ( last_separator != nullptr ) {
+            sizet name_length = strlen( last_separator + 1 );
+
+            memcpy( path, last_separator + 1, name_length );
+            path[ name_length ] = 0;
+        }
     }
 }

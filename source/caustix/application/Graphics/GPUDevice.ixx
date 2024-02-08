@@ -249,7 +249,7 @@ export namespace Caustix {
         bool                            resized                             = false;
         bool                            vertical_sync                       = false;
 
-        static constexpr cstring        k_name                              = "raptor_gpu_service";
+        static constexpr cstring        k_name                              = "caustix_gpu_service";
 
 
         VkAllocationCallbacks*          vulkan_allocation_callbacks;

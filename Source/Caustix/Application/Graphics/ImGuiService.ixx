@@ -65,12 +65,12 @@ export namespace Caustix {
 
 namespace Caustix {
     // Graphics Data
-    static TextureHandle g_font_texture;
-    static PipelineHandle g_imgui_pipeline;
-    static BufferHandle g_vb, g_ib;
-    static BufferHandle g_ui_cb;
-    static DescriptorSetLayoutHandle g_descriptor_set_layout;
-    static DescriptorSetHandle g_ui_descriptor_set;  // Font descriptor set
+    TextureHandle g_font_texture;
+    PipelineHandle g_imgui_pipeline;
+    BufferHandle g_vb, g_ib;
+    BufferHandle g_ui_cb;
+    DescriptorSetLayoutHandle g_descriptor_set_layout;
+    DescriptorSetHandle g_ui_descriptor_set;  // Font descriptor set
 
     static uint32_t g_vb_size = 665536, g_ib_size = 665536;
 
