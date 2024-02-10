@@ -1,7 +1,6 @@
 module;
 
 #include <cstdint>
-#include <stdint.h>
 #include <wyhash.h>
 
 export module Foundation.Platform;

@@ -182,7 +182,7 @@ target_link_libraries(CaustixExternal PUBLIC
 	imgui::imgui
 #		nlohmann_json::nlohmann_json
 	spdlog::spdlog
-#	Tracy::TracyClient
+	Tracy::TracyClient
 	GPUOpen::VulkanMemoryAllocator
 		$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
 		$<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>

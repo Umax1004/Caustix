@@ -14,7 +14,7 @@ module;
 
 export module Application.Input;
 
-import Application.Keys;
+export import Application.Keys;
 
 import Foundation.Memory.Allocators.Allocator;
 import Foundation.Services.Service;
