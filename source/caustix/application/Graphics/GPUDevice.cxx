@@ -438,11 +438,11 @@ namespace Caustix {
         u8* memory = callocam( sizeof( GPUTimestampManager ) + sizeof( CommandBuffer* ) * 128, allocator );
 
         VkSemaphoreCreateInfo semaphore_info{ VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO };
-        vkCreateSemaphore( vulkan_device, &semaphore_info, vulkan_allocation_callbacks, &vulkan_image_acquired_semaphore );
 
         for ( size_t i = 0; i < k_max_swapchain_images; i++ ) {
 
             vkCreateSemaphore( vulkan_device, &semaphore_info, vulkan_allocation_callbacks, &vulkan_render_complete_semaphore[ i ] );
+            vkCreateSemaphore( vulkan_device, &semaphore_info, vulkan_allocation_callbacks, &vulkan_image_acquired_semaphore[ i ] );
 
             VkFenceCreateInfo fenceInfo{ VK_STRUCTURE_TYPE_FENCE_CREATE_INFO };
             fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
@@ -564,10 +564,10 @@ namespace Caustix {
 
         for ( size_t i = 0; i < k_max_swapchain_images; i++ ) {
             vkDestroySemaphore( vulkan_device, vulkan_render_complete_semaphore[ i ], vulkan_allocation_callbacks );
+            vkDestroySemaphore( vulkan_device, vulkan_image_acquired_semaphore[ i ], vulkan_allocation_callbacks );
             vkDestroyFence( vulkan_device, vulkan_command_buffer_executed_fence[ i ], vulkan_allocation_callbacks );
         }
 
-        vkDestroySemaphore( vulkan_device, vulkan_image_acquired_semaphore, vulkan_allocation_callbacks );
 
         gpu_timestamp_manager->~GPUTimestampManager();
 
@@ -2500,7 +2500,7 @@ namespace Caustix {
 
         vkResetFences( vulkan_device, 1, render_complete_fence );
 
-        VkResult result = vkAcquireNextImageKHR( vulkan_device, vulkan_swapchain, UINT64_MAX, vulkan_image_acquired_semaphore, VK_NULL_HANDLE, &vulkan_image_index );
+        VkResult result = vkAcquireNextImageKHR( vulkan_device, vulkan_swapchain, UINT64_MAX, vulkan_image_acquired_semaphore[ current_frame ], VK_NULL_HANDLE, &vulkan_image_index );
         if ( result == VK_ERROR_OUT_OF_DATE_KHR ) {
             resize_swapchain();
         }
@@ -2532,6 +2532,7 @@ namespace Caustix {
 
         VkFence* render_complete_fence = &vulkan_command_buffer_executed_fence[ current_frame ];
         VkSemaphore* render_complete_semaphore = &vulkan_render_complete_semaphore[ current_frame ];
+        VkSemaphore* wait_semaphore = &vulkan_image_acquired_semaphore[ current_frame ];
 
         // Copy all commands
         VkCommandBuffer enqueued_command_buffers[ 4 ];
@@ -2548,12 +2549,11 @@ namespace Caustix {
         }
 
         // Submit command buffers
-        VkSemaphore wait_semaphores[] = { vulkan_image_acquired_semaphore };
         VkPipelineStageFlags wait_stages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 
         VkSubmitInfo submit_info = { VK_STRUCTURE_TYPE_SUBMIT_INFO };
         submit_info.waitSemaphoreCount = 1;
-        submit_info.pWaitSemaphores = wait_semaphores;
+        submit_info.pWaitSemaphores = wait_semaphore;
         submit_info.pWaitDstStageMask = wait_stages;
         submit_info.commandBufferCount = num_queued_command_buffers;
         submit_info.pCommandBuffers = enqueued_command_buffers;
