@@ -647,7 +647,7 @@ namespace Caustix {
 
 
         // Destroy render passes from the cache.
-        for(auto it=render_pass_cache.begin();it!=render_pass_cache.end();it++) {
+        for(auto it=render_pass_cache.begin();it!=render_pass_cache.end();++it) {
             VkRenderPass vk_render_pass = it->second;
             vkDestroyRenderPass( vulkan_device, vk_render_pass, vulkan_allocation_callbacks );
         }
@@ -2272,10 +2272,9 @@ namespace Caustix {
         if ( vulkan_render_pass ) {
             return vulkan_render_pass;
         }
-        vulkan_render_pass = vulkan_create_render_pass( *this, output, name );
-        render_pass_cache.emplace( hashed_memory, vulkan_render_pass );
+        render_pass_cache[ hashed_memory ] = vulkan_create_render_pass( *this, output, name );
 
-        return vulkan_render_pass;
+        return render_pass_cache[ hashed_memory ];
     }
 
 //
