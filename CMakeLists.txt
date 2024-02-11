@@ -133,6 +133,8 @@ add_library(CaustixApp)
 
 target_sources(CaustixApp PUBLIC
 		FILE_SET CXX_MODULES FILES
+		Source/Caustix/Application/Application.ixx
+		Source/Caustix/Application/GameApplication.ixx
 		Source/Caustix/Application/Window.ixx
 		Source/Caustix/Application/Input.ixx
 		Source/Caustix/Application/Keys.ixx
@@ -195,3 +197,4 @@ target_link_libraries(CaustixFoundation PUBLIC CaustixExternal)
 target_link_libraries(CaustixApp PUBLIC CaustixExternal)
 target_link_libraries(CaustixApp PUBLIC CaustixFoundation)
 add_subdirectory(source/test)
+add_subdirectory(Source/DemoApplication)

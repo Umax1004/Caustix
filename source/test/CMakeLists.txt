@@ -22,7 +22,7 @@ target_compile_definitions(test PRIVATE
 target_include_directories(test PRIVATE
         .
         ..
-        ../caustix
+        ../Caustix
         ${Vulkan_INCLUDE_DIRS}
 )
 

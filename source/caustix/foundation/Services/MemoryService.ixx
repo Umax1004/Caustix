@@ -2,6 +2,8 @@ module;
 
 #include <memory>
 
+#include <imgui.h>
+
 export module Foundation.Services.MemoryService;
 
 import Foundation.Memory.Allocators.LinearAllocator;
@@ -18,6 +20,8 @@ export namespace Caustix {
         LinearAllocator m_scratchAllocator;
         HeapAllocator m_systemAllocator;
 
+        void ImguiDraw();
+
         static MemoryService* Create(MemoryServiceConfiguration configuration) {
             static std::unique_ptr<MemoryService> instance{new MemoryService(configuration)};
             return instance.get();
@@ -30,4 +34,11 @@ export namespace Caustix {
 namespace Caustix {
     MemoryService::MemoryService(Caustix::MemoryServiceConfiguration configuration)
     : m_systemAllocator(configuration.m_maximumDynamicSize) {}
+
+    void MemoryService::ImguiDraw() {
+        if ( ImGui::Begin( "Memory Service" ) ) {
+            m_systemAllocator.debug_ui();
+        }
+        ImGui::End();
+    }
 }

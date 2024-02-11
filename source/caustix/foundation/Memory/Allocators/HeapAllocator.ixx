@@ -1,7 +1,9 @@
 module;
 
 #include "External/tlsf/tlsf.h"
-#include <stdlib.h>
+#include <cstdlib>
+
+#include <imgui.h>
 
 export module Foundation.Memory.Allocators.HeapAllocator;
 
@@ -21,6 +23,8 @@ export namespace Caustix {
         void*   allocate(sizet size, sizet alignment, cstring file, i32 line) override;
 
         void    deallocate(void *pointer) override;
+
+        void    debug_ui();
 
         void*   m_tlsfHandle;
         void*   m_memory;
@@ -83,5 +87,37 @@ namespace Caustix {
 
     void HeapAllocator::deallocate( void* pointer ) {
         tlsf_free( m_tlsfHandle, pointer );
+    }
+
+    void imgui_walker( void* ptr, size_t size, int used, void* user ) {
+
+        u32 memory_size = ( u32 )size;
+        cstring memory_unit = "b";
+        if ( memory_size > 1024 * 1024 ) {
+            memory_size /= 1024 * 1024;
+            memory_unit = "Mb";
+        }
+        else if ( memory_size > 1024 ) {
+            memory_size /= 1024;
+            memory_unit = "kb";
+        }
+        ImGui::Text( "\t%p %s size: %4llu %s\n", ptr, used ? "used" : "free", memory_size, memory_unit );
+
+        MemoryStatistics* stats = ( MemoryStatistics* )user;
+        stats->add( used ? size : 0 );
+    }
+
+    void HeapAllocator::debug_ui() {
+
+        ImGui::Separator();
+        ImGui::Text( "Heap Allocator" );
+        ImGui::Separator();
+        MemoryStatistics stats{ 0, m_maxSize };
+        pool_t pool = tlsf_get_pool( m_tlsfHandle );
+        tlsf_walk_pool( pool, imgui_walker, ( void* )&stats );
+
+        ImGui::Separator();
+        ImGui::Text( "\tAllocation count %d", stats.m_allocationCount );
+        ImGui::Text( "\tAllocated %llu K, free %llu Mb, total %llu Mb", stats.m_allocatedBytes / (1024 * 1024), ( m_maxSize - stats.m_allocatedBytes ) / ( 1024 * 1024 ), m_maxSize / ( 1024 * 1024 ) );
     }
 }
