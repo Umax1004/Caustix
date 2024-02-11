@@ -966,7 +966,7 @@ void main() {
 
     buffersData.clear();
 
-    auto beginFrameTick = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
+    auto beginFrameTick = std::chrono::system_clock::now();
 
     vec3s eye = vec3s{ 0.0f, 2.5f, 2.0f };
     vec3s look = vec3s{ 0.0f, 0.0, -1.0f };
@@ -997,8 +997,9 @@ void main() {
         // This MUST be AFTER os messages!
         imGuiService->NewFrame();
 
-        auto currentTick = std::chrono::system_clock::to_time_t( std::chrono::system_clock::now() );
-        f32 deltaTime = static_cast<f32>(std::difftime( beginFrameTick, currentTick ));
+        auto currentTick = std::chrono::system_clock::now();
+        // Using seconds doesn't work as expected
+        f32 deltaTime = static_cast<f32>(std::chrono::duration_cast<std::chrono::milliseconds>(currentTick - beginFrameTick).count()) / 1000.0;
         beginFrameTick = currentTick;
 
         inputHandler->NewFrame();
