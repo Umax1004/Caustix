@@ -28,8 +28,8 @@ constexpr const T& caustix_max( const T& a, const T& b ) {
 #define VMA_MAX caustix_max
 #define VMA_MIN caustix_min
 #define VMA_USE_STL_CONTAINERS 1
-#define VMA_USE_STL_VECTOR 0
-#define VMA_USE_STL_UNORDERED_MAP 0
+#define VMA_USE_STL_VECTOR 1
+#define VMA_USE_STL_UNORDERED_MAP 1
 #define VMA_USE_STL_LIST 0
 
 #define VMA_IMPLEMENTATION
