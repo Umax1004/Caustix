@@ -33,7 +33,8 @@ export namespace Caustix {
 
 namespace Caustix {
     MemoryService::MemoryService(Caustix::MemoryServiceConfiguration configuration)
-    : m_systemAllocator(configuration.m_maximumDynamicSize) {}
+    : m_systemAllocator(configuration.m_maximumDynamicSize)
+    , m_scratchAllocator(configuration.m_scratchBufferSize){}
 
     void MemoryService::ImguiDraw() {
         if ( ImGui::Begin( "Memory Service" ) ) {

@@ -1081,6 +1081,8 @@ void main() {
         }
 
         if ( !window->m_minimized ) {
+            ServiceManager::GetInstance()->Get<MemoryService>()->ImguiDraw();
+
             CommandBuffer* gpu_commands = gpu->get_command_buffer( QueueType::Graphics, true );
             gpu_commands->PushMarker( "Frame" );
 

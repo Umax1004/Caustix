@@ -10,7 +10,6 @@ import Application.Input;
 import Application.Window;
 import Application.Graphics.Renderer;
 import Application.Graphics.GPUDevice;
-import Application.Graphics.GPUProfiler;
 import Application.Graphics.ImGuiService;
 import Foundation.Services.MemoryService;
 import Foundation.Services.ServiceManager;
@@ -34,7 +33,7 @@ export namespace Caustix {
         void    FrameBegin() override;
         void    FrameEnd() override;
 
-        void    Render( f32 interpolation ) override;
+        void    Render( f32 interpolation, CommandBuffer* gpuCommands ) override;
 
         void    OnResize( u32 new_width, u32 new_height );
 
@@ -46,7 +45,9 @@ export namespace Caustix {
         InputService*   m_input           = nullptr;
         Renderer*       m_renderer        = nullptr;
         ImGuiService*   m_imgui           = nullptr;
-
+        MemoryService*  m_memoryService   = nullptr;
+        GpuDevice*      m_gpu             = nullptr;
+        StackAllocator  m_scratchAllocator;
     };
 }
 
@@ -56,12 +57,14 @@ namespace Caustix {
         input->OnEvent(os_event);
     }
 
-    GameApplication::GameApplication(const ApplicationConfiguration& configuration) : Application(configuration) {
-        StackAllocator scratchAllocator(cmega(8));
+    GameApplication::GameApplication(const ApplicationConfiguration& configuration)
+    : Application(configuration)
+    , m_scratchAllocator(cmega(8)){
 
         MemoryServiceConfiguration memoryConfiguration;
         ServiceManager::GetInstance()->AddService(MemoryService::Create(memoryConfiguration), MemoryService::m_name);
-        Allocator *allocator = &ServiceManager::GetInstance()->Get<MemoryService>()->m_systemAllocator;
+        m_memoryService = ServiceManager::GetInstance()->Get<MemoryService>();
+        Allocator *allocator = &m_memoryService->m_systemAllocator;
 
         WindowConfiguration wconf{1280, 800, "Caustix Test", allocator};
         ServiceManager::GetInstance()->AddService(Window::Create(wconf), Window::m_name);
@@ -75,20 +78,18 @@ namespace Caustix {
 
         // Graphics
         DeviceCreation deviceCreation;
-        deviceCreation.SetWindow(m_window->m_width, m_window->m_height, m_window->m_platformHandle).SetAllocator(allocator).SetLinearAllocator(&scratchAllocator);
+        deviceCreation.SetWindow(m_window->m_width, m_window->m_height, m_window->m_platformHandle).SetAllocator(allocator).SetLinearAllocator(&m_scratchAllocator);
 
         ServiceManager::GetInstance()->AddService(GpuDevice::Create(deviceCreation), GpuDevice::m_name);
-        GpuDevice *gpu = ServiceManager::GetInstance()->Get<GpuDevice>();
+        m_gpu = ServiceManager::GetInstance()->Get<GpuDevice>();
 
         ResourceManager resourceManager(allocator, nullptr);
 
-        GPUProfiler gpuProfiler(allocator, 100);
-
-        ServiceManager::GetInstance()->AddService(Renderer::Create({gpu, allocator}), Renderer::m_name);
+        ServiceManager::GetInstance()->AddService(Renderer::Create({m_gpu, allocator}), Renderer::m_name);
         m_renderer = ServiceManager::GetInstance()->Get<Renderer>();
         m_renderer->SetLoaders(&resourceManager);
 
-        ImGuiServiceConfiguration imGuiServiceConfiguration{gpu, m_window->m_platformHandle};
+        ImGuiServiceConfiguration imGuiServiceConfiguration{m_gpu, m_window->m_platformHandle};
         ServiceManager::GetInstance()->AddService(ImGuiService::Create(imGuiServiceConfiguration),ImGuiService::m_name);
         m_imgui = ServiceManager::GetInstance()->Get<ImGuiService>();
 
@@ -153,7 +154,7 @@ namespace Caustix {
                 gpuCommands->PushMarker( "Frame" );
 
                 const f32 interpolation_factor = glm_clamp( (f32)(m_accumulator / m_step), 0.0f, 1.0f );
-                Render( interpolation_factor );
+                Render( interpolation_factor, gpuCommands );
 
                 m_imgui->Render( *gpuCommands );
 
@@ -185,7 +186,7 @@ namespace Caustix {
 
     }
 
-    void GameApplication::Render(f32 interpolation)
+    void GameApplication::Render(f32 interpolation, CommandBuffer* gpuCommands)
     {
 
     }
@@ -204,6 +205,4 @@ namespace Caustix {
     {
 
     }
-
-
 }

@@ -3,6 +3,8 @@ export module Application.Application;
 export import Foundation.Platform;
 import Foundation.Services.ServiceManager;
 
+import Application.Graphics.CommandBuffer;
+
 export namespace Caustix {
     struct ApplicationConfiguration {
         u32                         m_width;
@@ -28,7 +30,7 @@ export namespace Caustix {
         // Variable time update. Called only once per frame.
         virtual void                VariableUpdate( f32 delta ) {}
         // Rendering with optional interpolation factor.
-        virtual void                Render( f32 interpolation ) {}
+        virtual void                Render( f32 interpolation, CommandBuffer* gpuCommands ) {}
         // Per frame begin/end.
         virtual void                FrameBegin() {}
         virtual void                FrameEnd() {}

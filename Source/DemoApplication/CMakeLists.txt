@@ -4,6 +4,11 @@ add_executable(DemoApplication
         main.cpp
 )
 
+target_sources(DemoApplication PUBLIC
+        FILE_SET CXX_MODULES FILES
+        DemoApplication.ixx
+)
+
 set_property(TARGET DemoApplication PROPERTY CXX_STANDARD 23)
 
 if (WIN32)
