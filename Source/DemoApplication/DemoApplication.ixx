@@ -178,6 +178,8 @@ namespace Caustix {
         memcpy(gltfBasePath, argv[1], strlen(argv[1]));
         FileDirectoryFromPath(gltfBasePath);
 
+        const auto cwd = std::filesystem::current_path();
+
         std::filesystem::current_path(gltfBasePath);
 
         char gltfFile[512]{};
@@ -951,6 +953,7 @@ namespace Caustix {
         m_gameCamera.m_camera.IntializePerspective(0.01, 100.0, 45, m_window->m_width / m_window->m_height);
         m_gameCamera.Reset();
 
+        std::filesystem::current_path(cwd);
     }
 
     void DemoApplication::Shutdown() {
