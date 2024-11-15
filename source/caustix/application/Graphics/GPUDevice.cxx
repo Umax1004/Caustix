@@ -39,8 +39,6 @@ constexpr const T& caustix_max( const T& a, const T& b ) {
 #include <SDL.h>
 #include <SDL_vulkan.h>
 
-#include <wyhash.h>
-
 module Application.Graphics.GPUDevice;
 
 import Application.Graphics.CommandBuffer;

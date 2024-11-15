@@ -1,9 +1,10 @@
 module;
 
-#include <cstdint>
 #include <wyhash.h>
 
 export module Foundation.Platform;
+
+import std;
 
 export {
     // Native types typedefs /////////////////////////////////////////////////
@@ -40,23 +41,28 @@ export {
         return N;
     }
 
+    u64 HashingFunction( const void* key, size_t len, uint64_t seed, const uint64_t* secret)
+    {
+        return wyhash(key, len, seed, secret);
+    }
+
     template<typename T>
     inline u64 HashCalculate( const T& value, sizet seed = 0 ) {
-        return wyhash( &value, sizeof( T ), seed, _wyp );
+        return HashingFunction( &value, sizeof( T ), seed, _wyp );
     }
 
     template <size_t N>
     inline u64 HashCalculate( const char( &value )[ N ], sizet seed = 0 ) {
-        return wyhash( value, strlen(value), seed, _wyp );
+        return HashingFunction( value, strlen(value), seed, _wyp );
     }
 
     template <>
     inline u64 HashCalculate( const cstring& value, sizet seed ) {
-        return wyhash( value, strlen( value ), seed, _wyp );
+        return HashingFunction( value, strlen( value ), seed, _wyp );
     }
 
     // Method to hash memory itself.
     inline u64 HashBytes( void* data, sizet length, sizet seed = 0) {
-        return wyhash( data, length, seed, _wyp );
+        return HashingFunction( data, length, seed, _wyp );
     }
 }

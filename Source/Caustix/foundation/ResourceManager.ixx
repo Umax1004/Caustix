@@ -1,6 +1,5 @@
 module;
 
-#include <wyhash.h>
 #include <unordered_map>
 
 export module Foundation.ResourceManager;

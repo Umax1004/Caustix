@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.30)
 
 if(WIN32)
 	include(FetchContent)
@@ -11,9 +11,13 @@ endif()
 
 set(CMAKE_TOOLCHAIN_FILE ${vcpkg_SOURCE_DIR}/scripts/buildsystems/vcpkg.cmake CACHE STRING "CMake toolchain file")
 
+set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "0e5b6991-d74f-4b3d-a41c-cf096e0b2508")
+
 set(CMAKE_CXX_STANDARD 23)
 
-set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+set(CMAKE_CXX_MODULE_STD 1)
+
+set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -97,19 +101,18 @@ target_sources(CaustixFoundation PUBLIC
 	Source/Caustix/Foundation/Camera.ixx
 	Source/Caustix/Foundation/Log.ixx
 	Source/Caustix/Foundation/Platform.ixx
-		Source/Caustix/Foundation/Color.ixx
-		Source/Caustix/Foundation/DataStructures.ixx
-		Source/Caustix/Foundation/glTF.ixx
-		Source/Caustix/Foundation/glTF.ixx
-		Source/Caustix/Foundation/File.ixx
-		Source/Caustix/Foundation/Memory/MemoryDefines.ixx
-		Source/Caustix/Foundation/Memory/Allocators/HeapAllocator.ixx
-		Source/Caustix/Foundation/Services/ServiceManager.ixx
-		Source/Caustix/Foundation/Services/Service.ixx
-		Source/Caustix/Foundation/Services/MemoryService.ixx
-		Source/Caustix/Foundation/Numerics.ixx
-		Source/Caustix/Foundation/Process.ixx
-		Source/Caustix/Foundation/ResourceManager.ixx
+	Source/Caustix/Foundation/Color.ixx
+	Source/Caustix/Foundation/DataStructures.ixx
+	Source/Caustix/Foundation/glTF.ixx
+	Source/Caustix/Foundation/File.ixx
+	Source/Caustix/Foundation/Memory/MemoryDefines.ixx
+	Source/Caustix/Foundation/Memory/Allocators/HeapAllocator.ixx
+	Source/Caustix/Foundation/Services/ServiceManager.ixx
+	Source/Caustix/Foundation/Services/Service.ixx
+	Source/Caustix/Foundation/Services/MemoryService.ixx
+	Source/Caustix/Foundation/Numerics.ixx
+	Source/Caustix/Foundation/Process.ixx
+	Source/Caustix/Foundation/ResourceManager.ixx
 		#		source/caustix/foundation/time.ixx
 #		source/caustix/foundation/hash_map.ixx
 )

@@ -165,7 +165,7 @@ namespace Caustix {
         const f32 tweenPositionSpeed = m_movementSpeed * deltaTime;
         m_camera.m_position = lerp3(m_camera.m_position, m_targetMovement, 0.9f, tweenPositionSpeed);
 
-        info("{} - {}", m_targetPitch, m_camera.m_pitch);
+                                            // info("{} - {}", m_targetPitch, m_camera.m_pitch);
     }
 
     void GameCamera::ApplyJittering(f32 x, f32 y) {

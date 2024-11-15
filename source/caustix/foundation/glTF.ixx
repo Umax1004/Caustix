@@ -20,7 +20,7 @@ import Foundation.File;
 export namespace Caustix {
 
     void InjectDefault3DModel(int& argc, char** argv) {
-        static const char* kDefault3DModel = "../../../../Models/2.0/Sponza/glTF/Sponza.gltf";
+        static const char* kDefault3DModel = "../../../Models/2.0/Sponza/glTF/Sponza.gltf";
         if (std::filesystem::exists(kDefault3DModel)) {
             argc = 2;
             argv[1] = const_cast<char*>(kDefault3DModel);
